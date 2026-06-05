@@ -1,0 +1,20 @@
+Now let me generate the roadmap PDF using Python + ReportLab.Your **personalised one-page Career Roadmap PDF** is ready! 🎉
+
+Here's a quick summary of the Chain-of-Thought reasoning behind it:
+
+**Analysis:**
+- **Strength:** You already have Python/Data — that's the #1 most in-demand skill for entry-level roles. You're ahead of most students.
+- **Gaps identified:** SQL, Statistics, ML basics, Git/GitHub, and a portfolio — these are the exact things recruiters screen for.
+- **Fastest path:** Build 4 real projects, close the skill gaps in parallel, and apply actively from Week 5 onwards.
+
+**What's inside the roadmap:**
+| Section | What you get |
+|---|---|
+| Skill Gap Analysis | Exactly what you have vs. what's missing |
+| Learning Plan | 6 bi-weekly milestones with free resources |
+| Projects | 4 portfolio projects to build & ship |
+| Networking Strategy | LinkedIn + community + cold outreach plan |
+| Monthly Milestones | Month 1 → 2 → 3 checkpoints |
+| Immediate Next Actions | 5 things to do TODAY |
+
+> *Generated using Chain-of-Thought Reasoning*
