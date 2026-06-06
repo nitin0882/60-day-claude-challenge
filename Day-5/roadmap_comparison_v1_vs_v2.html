@@ -1,0 +1,105 @@
+
+<h2 class="sr-only">Side-by-side comparison of Roadmap 1 (no context, PDF-based) vs Roadmap 2 (with structured context) across 7 dimensions</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+.dim-row{display:grid;grid-template-columns:140px minmax(0,1fr) minmax(0,1fr);gap:0;margin-bottom:2px}
+.dim-row:first-of-type .cell{border-top:0.5px solid var(--color-border-tertiary)}
+.cell{padding:.7rem 1rem;border-bottom:0.5px solid var(--color-border-tertiary);border-right:0.5px solid var(--color-border-tertiary);font-size:13px;color:var(--color-text-primary);line-height:1.5}
+.cell:first-child{border-left:0.5px solid var(--color-border-tertiary);font-size:12px;font-weight:500;color:var(--color-text-secondary);background:var(--color-background-secondary);display:flex;align-items:center}
+.col-head{padding:.6rem 1rem;font-size:12px;font-weight:500;border-radius:var(--border-radius-md);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.h1{background:#E1F5EE;color:#085041}
+.h2{background:#EEEDFE;color:#3C3489}
+.heads{display:grid;grid-template-columns:140px minmax(0,1fr) minmax(0,1fr);gap:0;margin-bottom:4px}
+.verdict{margin-top:1.25rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.vc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.875rem 1rem}
+.vc-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.vc-val{font-size:13px;color:var(--color-text-primary);line-height:1.5}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;margin-right:4px;margin-bottom:3px}
+.t-miss{background:#FAECE7;color:#712B13}
+.t-hit{background:#E1F5EE;color:#085041}
+.t-neu{background:#F1EFE8;color:#444441}
+.delta{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:99px;background:#EEEDFE;color:#3C3489;margin-top:4px}
+.delta i{font-size:12px}
+.win-badge{font-size:11px;padding:2px 8px;border-radius:99px;background:#EEEDFE;color:#3C3489}
+.lose-badge{font-size:11px;padding:2px 8px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.section-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin:1.5rem 0 .75rem}
+.insight{border-left:3px solid #534AB7;padding:.75rem 1rem;background:var(--color-background-secondary);border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;margin-top:1.25rem;font-size:13px;color:var(--color-text-primary);line-height:1.6}
+.insight i{color:#534AB7;margin-right:6px;font-size:14px;vertical-align:-2px}
+</style>
+
+<div class="wrap">
+
+<div class="heads">
+  <div></div>
+  <div class="col-head h1"><i class="ti ti-file-text" aria-hidden="true" style="font-size:14px"></i>Roadmap 1 — PDF only, no context</div>
+  <div class="col-head h2"><i class="ti ti-user-check" aria-hidden="true" style="font-size:14px"></i>Roadmap 2 — structured context</div>
+</div>
+
+<div class="dim-row">
+  <div class="cell">Input source</div>
+  <div class="cell">Career roadmap PDF (data analyst focus)<br><span class="tag t-miss">inferred goal</span><span class="tag t-miss">no skill level</span></div>
+  <div class="cell">6-field context: role, skills, goal, time, level, style<br><span class="tag t-hit">explicit goal</span><span class="tag t-hit">known baseline</span></div>
+</div>
+<div class="dim-row">
+  <div class="cell">Career track</div>
+  <div class="cell">Data analyst / data scientist<br><span class="tag t-miss">wrong track</span> SQL, Pandas, Scikit-Learn, stats</div>
+  <div class="cell">Python developer / backend engineer<br><span class="tag t-hit">correct track</span> OOP, FastAPI, databases, deployment</div>
+</div>
+<div class="dim-row">
+  <div class="cell">Starting point</div>
+  <div class="cell">Day 1 covers Python basics &amp; SQL intro — assumed no prior knowledge</div>
+  <div class="cell">Day 1 skips basics, begins at OOP &amp; classes — respects existing Python skills</div>
+</div>
+<div class="dim-row">
+  <div class="cell">Daily pacing</div>
+  <div class="cell">~1 hr/day implied (matches PDF's "commit 1 hour")<br><span class="tag t-miss">part-time assumed</span></div>
+  <div class="cell">6–8 hrs/day — full-time depth per week, deeper projects<br><span class="tag t-hit">full-time respected</span></div>
+</div>
+<div class="dim-row">
+  <div class="cell">Week structure</div>
+  <div class="cell">Weeks 1–2, 3–4, 5–6, 7–8 (2-week blocks)<br>10 days per block, mixed pacing</div>
+  <div class="cell">Week 1, 2, 3, 4 (weekly blocks)<br>7 focused days, clear weekly outcome</div>
+</div>
+<div class="dim-row">
+  <div class="cell">Projects</div>
+  <div class="cell">COVID-19 explorer, Movie recommender, SQL dashboard, ML pipeline<br><span class="tag t-miss">data science portfolio</span></div>
+  <div class="cell">CLI task manager, Weather API, Finance tracker API, Deployed portfolio<br><span class="tag t-hit">Python dev portfolio</span></div>
+</div>
+<div class="dim-row">
+  <div class="cell">Resources</div>
+  <div class="cell">Kaggle, StatQuest, Khan Academy, fast.ai, Mode Analytics<br><span class="tag t-neu">data-science focused</span></div>
+  <div class="cell">CS50P, Corey Schafer (video), Real Python, FastAPI docs, freeCodeCamp<br><span class="tag t-hit">matches video+reading style</span></div>
+</div>
+<div class="dim-row">
+  <div class="cell">Learning style</div>
+  <div class="cell">Not addressed — generic mix of text docs and courses</div>
+  <div class="cell">Videos prioritised first, docs second, projects every week — matches stated preference</div>
+</div>
+<div class="dim-row">
+  <div class="cell">Final outcome</div>
+  <div class="cell">Data analyst job — LinkedIn, cold DMs, data viz, interview prep</div>
+  <div class="cell">Python developer job — live deployed app, CI/CD pipeline, backend API portfolio</div>
+</div>
+
+<div class="section-title">Verdict</div>
+<div class="verdict">
+  <div class="vc">
+    <div class="vc-label">Personalisation</div>
+    <div class="vc-val">Roadmap 2 wins — knows your level, pace, style, and goal. Roadmap 1 assumed everything from a third-party PDF.</div>
+  </div>
+  <div class="vc">
+    <div class="vc-label">Correct career direction</div>
+    <div class="vc-val">Roadmap 2 only. Roadmap 1 points to a data analyst role — a genuinely different job market with different interviews and skills.</div>
+  </div>
+  <div class="vc">
+    <div class="vc-label">Would actually follow</div>
+    <div class="vc-val">Roadmap 2 — builds a backend portfolio you can show to Python dev employers. Roadmap 1's projects signal "data science" not "Python developer".</div>
+  </div>
+</div>
+
+<div class="insight">
+  <i class="ti ti-bulb" aria-hidden="true"></i>The core difference: Roadmap 1 answered "what should someone learn?" — Roadmap 2 answered "what should <em>you</em> learn, given who you are and where you want to go?" Context turns a generic template into a plan you can actually act on.
+</div>
+
+</div>

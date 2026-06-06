@@ -1,0 +1,276 @@
+
+<h2 class="sr-only">30-Day Python & Data Science Learning Roadmap — interactive tracker with weekly milestones, daily tasks, resources, and projects</h2>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.roadmap { padding: 1.5rem 0; }
+.header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px; }
+.progress-bar-wrap { background: var(--color-background-secondary); border-radius: 99px; height: 8px; flex: 1; min-width: 120px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: #1D9E75; border-radius: 99px; transition: width 0.4s ease; }
+.stats-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.stat-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+.stat-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.stat-value { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+.week-block { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); margin-bottom: 1rem; overflow: hidden; }
+.week-header { display: flex; align-items: center; gap: 12px; padding: 0.875rem 1.25rem; cursor: pointer; background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); user-select: none; }
+.week-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; flex-shrink: 0; }
+.w1 .week-badge { background: #E1F5EE; color: #0F6E56; }
+.w2 .week-badge { background: #E6F1FB; color: #185FA5; }
+.w3 .week-badge { background: #FAEEDA; color: #854F0B; }
+.w4 .week-badge { background: #EEEDFE; color: #534AB7; }
+.week-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+.week-meta { font-size: 13px; color: var(--color-text-secondary); }
+.week-chevron { font-size: 16px; color: var(--color-text-secondary); transition: transform 0.2s; }
+.week-body { padding: 1.25rem; background: var(--color-background-primary); }
+.week-body.collapsed { display: none; }
+.milestone-tag { display: inline-block; background: var(--color-background-success); color: var(--color-text-success); font-size: 12px; padding: 3px 10px; border-radius: 99px; margin-bottom: 1rem; }
+.days-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+.day-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem; border: 0.5px solid var(--color-border-tertiary); cursor: pointer; transition: border-color 0.15s; position: relative; }
+.day-card:hover { border-color: var(--color-border-secondary); }
+.day-card.done { border-color: #1D9E75; background: #E1F5EE; }
+.day-card.done .day-task { color: #085041; }
+.day-num { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; }
+.day-task { font-size: 13px; color: var(--color-text-primary); line-height: 1.4; }
+.day-check { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid #1D9E75; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.day-card.done .day-check { background: #1D9E75; }
+.day-check i { font-size: 10px; color: white; display: none; }
+.day-card.done .day-check i { display: block; }
+.section-label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+.resources-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.25rem; }
+.resource-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; padding: 4px 10px; border-radius: 99px; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); color: var(--color-text-primary); text-decoration: none; }
+.resource-pill i { font-size: 13px; color: var(--color-text-secondary); }
+.project-row { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; border-left: 3px solid #1D9E75; }
+.project-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.project-stack { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; }
+.outcome-box { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-top: 1rem; background: var(--color-background-primary); }
+.outcome-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 8px; }
+.outcome-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.outcome-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--color-text-primary); }
+.outcome-item i { color: #1D9E75; font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+</style>
+
+<div class="roadmap">
+
+<div class="header-row">
+  <div style="font-size: 13px; color: var(--color-text-secondary);">Overall progress</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="main-bar" style="width:0%"></div>
+  </div>
+  <div id="main-pct" style="font-size: 13px; font-weight: 500; color: var(--color-text-primary); min-width: 36px; text-align: right;">0%</div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">Days complete</div><div class="stat-value" id="s-done">0</div></div>
+  <div class="stat-card"><div class="stat-label">Remaining</div><div class="stat-value" id="s-left">30</div></div>
+  <div class="stat-card"><div class="stat-label">Weeks</div><div class="stat-value">4</div></div>
+  <div class="stat-card"><div class="stat-label">Projects</div><div class="stat-value">4</div></div>
+</div>
+
+<div id="weeks-container"></div>
+
+<div class="outcome-box">
+  <div class="outcome-title"><i class="ti ti-trophy" aria-hidden="true"></i> Final outcome — day 30</div>
+  <div class="outcome-grid">
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>SQL & statistics foundations solid</div>
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>Pandas mastery with real datasets</div>
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>Machine learning basics with Scikit-Learn</div>
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>4 GitHub projects in public portfolio</div>
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>Git & GitHub workflow fluency</div>
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>Data viz with Matplotlib & Plotly</div>
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>LinkedIn optimised & job applications live</div>
+    <div class="outcome-item"><i class="ti ti-check" aria-hidden="true"></i>Ready for data analyst / Python internship</div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const weeks = [
+  {
+    id: 'w1',
+    label: 'Week 1–2',
+    title: 'SQL fundamentals',
+    milestone: 'Complete SQL course + push first dataset exploration to GitHub',
+    days: [
+      { n: 1, task: 'Set up GitHub profile & write bio' },
+      { n: 2, task: 'Intro to SQL — SELECT, WHERE, ORDER BY' },
+      { n: 3, task: 'SQL JOINs — INNER, LEFT, RIGHT' },
+      { n: 4, task: 'Aggregate functions — COUNT, SUM, AVG' },
+      { n: 5, task: 'GROUP BY, HAVING, subqueries' },
+      { n: 6, task: 'Practice: SQLZoo murder mystery challenge' },
+      { n: 7, task: 'REST DAY — review week 1 notes' },
+      { n: 8, task: 'Window functions — ROW_NUMBER, RANK, LAG' },
+      { n: 9, task: 'CTEs & advanced query patterns' },
+      { n: 10, task: 'Mini project: SQL queries on real dataset' },
+    ],
+    resources: [
+      { label: 'SQLZoo', url: 'https://sqlzoo.net', icon: 'ti-code' },
+      { label: 'Mode Analytics SQL', url: 'https://mode.com/sql-tutorial/', icon: 'ti-code' },
+      { label: 'W3Schools SQL', url: 'https://www.w3schools.com/sql/', icon: 'ti-book' },
+    ],
+    project: { name: 'SQL Sales Dashboard', stack: 'SQLite + Python + Plotly', key: 'SQL, dashboarding' }
+  },
+  {
+    id: 'w2',
+    label: 'Week 3–4',
+    title: 'Statistics & probability',
+    milestone: 'Build intuition for stats; complete Project 1 and push to GitHub',
+    days: [
+      { n: 11, task: 'Descriptive stats — mean, median, variance' },
+      { n: 12, task: 'Distributions — normal, binomial, Poisson' },
+      { n: 13, task: 'Probability basics — Bayes\' theorem' },
+      { n: 14, task: 'REST DAY — StatQuest playlist' },
+      { n: 15, task: 'Hypothesis testing — t-test, p-value' },
+      { n: 16, task: 'Correlation vs causation; Pearson r' },
+      { n: 17, task: 'Apply stats to COVID-19 dataset' },
+      { n: 18, task: 'Exploratory data analysis techniques' },
+      { n: 19, task: 'Data cleaning with Pandas' },
+      { n: 20, task: 'Finish & publish Project 1 on GitHub' },
+    ],
+    resources: [
+      { label: 'Khan Academy Stats', url: 'https://www.khanacademy.org/math/statistics-probability', icon: 'ti-school' },
+      { label: 'StatQuest YouTube', url: 'https://www.youtube.com/@statquest', icon: 'ti-player-play' },
+      { label: 'Kaggle Python Course', url: 'https://www.kaggle.com/learn/python', icon: 'ti-code' },
+    ],
+    project: { name: 'COVID-19 Data Explorer', stack: 'Pandas + Matplotlib + Seaborn', key: 'EDA, storytelling' }
+  },
+  {
+    id: 'w3',
+    label: 'Week 5–6',
+    title: 'Machine learning basics',
+    milestone: 'Train first ML model; build Movie Recommender and push to GitHub',
+    days: [
+      { n: 21, task: 'Intro to ML — supervised vs unsupervised' },
+      { n: 22, task: 'Linear regression from scratch' },
+      { n: 23, task: 'Scikit-Learn pipeline: fit, predict, score' },
+      { n: 24, task: 'REST DAY — fast.ai lesson 1' },
+      { n: 25, task: 'Classification — logistic regression, KNN' },
+      { n: 26, task: 'Model evaluation — accuracy, F1, ROC-AUC' },
+      { n: 27, task: 'Collaborative filtering basics' },
+      { n: 28, task: 'Build Movie Recommender skeleton' },
+      { n: 29, task: 'Cross-validation & hyperparameter tuning' },
+      { n: 30, task: 'Finish recommender + push to GitHub' },
+    ],
+    resources: [
+      { label: 'fast.ai Course', url: 'https://www.fast.ai/', icon: 'ti-school' },
+      { label: 'Coursera ML', url: 'https://www.coursera.org/learn/machine-learning', icon: 'ti-certificate' },
+      { label: 'Scikit-Learn Docs', url: 'https://scikit-learn.org/stable/getting_started.html', icon: 'ti-book' },
+    ],
+    project: { name: 'Movie Recommender System', stack: 'Scikit-Learn + Python', key: 'ML, collaborative filtering' }
+  },
+  {
+    id: 'w4',
+    label: 'Week 7–8 (mapped to days 21–30 sprint)',
+    title: 'Git, data viz & job prep',
+    milestone: 'Portfolio live, 20+ applications sent, 5+ interviews scheduled',
+    days: [],
+    extraDays: [
+      { n: 'A', task: 'Git fundamentals — commit, branch, merge' },
+      { n: 'B', task: 'GitHub workflow — PRs, issues, README' },
+      { n: 'C', task: 'Matplotlib deep dive — subplots, styling' },
+      { n: 'D', task: 'REST DAY — polish existing repos' },
+      { n: 'E', task: 'Plotly interactive charts' },
+      { n: 'F', task: 'Build End-to-End ML Pipeline project' },
+      { n: 'G', task: 'LeetCode easy — 3 problems' },
+      { n: 'H', task: 'LinkedIn to Open to Work + cold DMs ×5' },
+      { n: 'I', task: 'Apply to 5 targeted roles today' },
+      { n: 'J', task: 'Portfolio site live + final review' },
+    ],
+    resources: [
+      { label: 'GitHub Docs', url: 'https://docs.github.com/en/get-started', icon: 'ti-brand-github' },
+      { label: 'freeCodeCamp Git', url: 'https://www.freecodecamp.org/news/git-and-github-for-beginners/', icon: 'ti-code' },
+      { label: 'LeetCode Easy', url: 'https://leetcode.com/problemset/?difficulty=EASY', icon: 'ti-brain' },
+    ],
+    project: { name: 'End-to-End ML Pipeline', stack: 'Scikit-Learn + GitHub Actions', key: 'MLOps, deployment' }
+  }
+];
+
+const done = new Set(JSON.parse(localStorage && localStorage.getItem ? localStorage.getItem('rdmp_done') || '[]' : '[]').filter(Boolean));
+
+function saveDone() {
+  try { if (localStorage) localStorage.setItem('rdmp_done', JSON.stringify([...done])); } catch(e){}
+}
+
+function updateStats() {
+  const d = done.size;
+  document.getElementById('s-done').textContent = d;
+  document.getElementById('s-left').textContent = Math.max(0, 30 - d);
+  const pct = Math.round((d / 30) * 100);
+  document.getElementById('main-bar').style.width = pct + '%';
+  document.getElementById('main-pct').textContent = pct + '%';
+}
+
+function renderWeeks() {
+  const container = document.getElementById('weeks-container');
+  weeks.forEach((w, wi) => {
+    const allDays = w.days.length > 0 ? w.days : w.extraDays;
+    const numericDays = w.days.length > 0 ? w.days : [];
+    const doneDays = numericDays.filter(d => done.has(d.n)).length;
+    const totalDays = numericDays.length || allDays.length;
+    const weekBlock = document.createElement('div');
+    weekBlock.className = 'week-block ' + w.id;
+
+    let daysHTML = (w.days.length > 0 ? w.days : w.extraDays).map(d => {
+      const key = typeof d.n === 'number' ? d.n : 'e' + d.n;
+      const isDone = done.has(key);
+      return `<div class="day-card${isDone ? ' done' : ''}" data-key="${key}" onclick="toggleDay(this,'${key}')">
+        <div class="day-num"><span>Day ${d.n}</span><div class="day-check"><i class="ti ti-check" aria-hidden="true"></i></div></div>
+        <div class="day-task">${d.task}</div>
+      </div>`;
+    }).join('');
+
+    let resHTML = w.resources.map(r =>
+      `<a href="${r.url}" class="resource-pill" target="_blank"><i class="ti ${r.icon}" aria-hidden="true"></i>${r.label}</a>`
+    ).join('');
+
+    weekBlock.innerHTML = `
+      <div class="week-header" onclick="toggleWeek(this)">
+        <span class="week-badge">${w.label}</span>
+        <span class="week-title">${w.title}</span>
+        <span class="week-meta">${doneDays}/${totalDays} days</span>
+        <i class="ti ti-chevron-down week-chevron" aria-hidden="true"></i>
+      </div>
+      <div class="week-body${wi > 0 ? ' collapsed' : ''}">
+        <div class="milestone-tag"><i class="ti ti-flag-2" aria-hidden="true" style="font-size:12px;margin-right:4px;"></i> ${w.milestone}</div>
+        <div class="section-label">Daily tasks</div>
+        <div class="days-grid">${daysHTML}</div>
+        <div class="section-label">Resources</div>
+        <div class="resources-row">${resHTML}</div>
+        <div class="section-label" style="margin-top:1rem;">Project this block</div>
+        <div class="project-row">
+          <div class="project-name"><i class="ti ti-code-circle" aria-hidden="true" style="font-size:15px;margin-right:6px;color:#1D9E75;vertical-align:-2px;"></i>${w.project.name}</div>
+          <div class="project-stack">${w.project.stack} — ${w.project.key}</div>
+        </div>
+      </div>`;
+    container.appendChild(weekBlock);
+  });
+}
+
+window.toggleDay = function(el, key) {
+  const numKey = isNaN(key) ? key : Number(key);
+  if (done.has(numKey)) { done.delete(numKey); el.classList.remove('done'); }
+  else { done.add(numKey); el.classList.add('done'); }
+  saveDone(); updateStats();
+  const header = el.closest('.week-block').querySelector('.week-meta');
+  const block = el.closest('.week-block');
+  const cards = block.querySelectorAll('.day-card[data-key]');
+  let d = 0, t = 0;
+  cards.forEach(c => { t++; if(c.classList.contains('done')) d++; });
+  header.textContent = d + '/' + t + ' days';
+};
+
+window.toggleWeek = function(headerEl) {
+  const body = headerEl.nextElementSibling;
+  const chevron = headerEl.querySelector('.week-chevron');
+  body.classList.toggle('collapsed');
+  chevron.style.transform = body.classList.contains('collapsed') ? '' : 'rotate(180deg)';
+};
+
+renderWeeks();
+done.forEach(key => {
+  const el = document.querySelector(`[data-key="${key}"]`);
+  if (el) el.classList.add('done');
+});
+updateStats();
+</script>

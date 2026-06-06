@@ -1,0 +1,232 @@
+
+<h2 class="sr-only">30-day Python Developer roadmap for a full-time beginner student with Python basics — interactive day tracker with weekly milestones, resources, and projects</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.rm{padding:1.5rem 0}
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;flex-wrap:wrap}
+.pb-wrap{flex:1;min-width:120px;height:8px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden}
+.pb-fill{height:100%;background:#534AB7;border-radius:99px;transition:width .4s}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
+.sc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.sc-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.sc-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.profile-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;flex-wrap:wrap;gap:10px}
+.profile-pill{font-size:12px;padding:4px 12px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary);display:flex;align-items:center;gap:5px}
+.profile-pill i{font-size:13px}
+.wk{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:1rem;overflow:hidden}
+.wk-head{display:flex;align-items:center;gap:12px;padding:.875rem 1.25rem;cursor:pointer;background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.wk-badge{font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;flex-shrink:0}
+.b1 .wk-badge{background:#EEEDFE;color:#534AB7}
+.b2 .wk-badge{background:#E1F5EE;color:#0F6E56}
+.b3 .wk-badge{background:#FAEEDA;color:#854F0B}
+.b4 .wk-badge{background:#FAECE7;color:#993C1D}
+.wk-title{font-size:15px;font-weight:500;color:var(--color-text-primary);flex:1}
+.wk-meta{font-size:13px;color:var(--color-text-secondary)}
+.wk-chev{font-size:16px;color:var(--color-text-secondary);transition:transform .2s}
+.wk-body{padding:1.25rem;background:var(--color-background-primary)}
+.wk-body.col{display:none}
+.ms-tag{display:inline-flex;align-items:center;gap:5px;background:var(--color-background-success);color:var(--color-text-success);font-size:12px;padding:3px 10px;border-radius:99px;margin-bottom:1rem}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px;margin-bottom:1.25rem}
+.dc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem;border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:border-color .15s}
+.dc:hover{border-color:var(--color-border-secondary)}
+.dc.done{border-color:#534AB7;background:#EEEDFE}
+.dc.done .dt{color:#26215C}
+.dn{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.dt{font-size:13px;color:var(--color-text-primary);line-height:1.4}
+.dck{width:16px;height:16px;border-radius:50%;border:1.5px solid #534AB7;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dc.done .dck{background:#534AB7}
+.dck i{font-size:10px;color:white;display:none}
+.dc.done .dck i{display:block}
+.sec{font-size:12px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.res-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem}
+.rpill{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;border-radius:99px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);text-decoration:none}
+.rpill i{font-size:13px;color:var(--color-text-secondary)}
+.proj{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;border-left:3px solid #534AB7}
+.proj-name{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.proj-desc{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{font-size:11px;background:#EEEDFE;color:#534AB7;padding:2px 8px;border-radius:99px}
+.outcome{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-top:1rem}
+.out-title{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.out-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.out-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--color-text-primary)}
+.out-item i{color:#534AB7;font-size:15px;margin-top:1px;flex-shrink:0}
+</style>
+
+<div class="rm">
+<div class="topbar">
+  <span style="font-size:13px;color:var(--color-text-secondary)">Overall progress</span>
+  <div class="pb-wrap"><div class="pb-fill" id="pbar" style="width:0%"></div></div>
+  <span id="ppct" style="font-size:13px;font-weight:500;color:var(--color-text-primary);min-width:36px;text-align:right">0%</span>
+</div>
+
+<div class="profile-card">
+  <div class="profile-pill"><i class="ti ti-user" aria-hidden="true"></i>Student — full time</div>
+  <div class="profile-pill"><i class="ti ti-code" aria-hidden="true"></i>Have: Python basics</div>
+  <div class="profile-pill"><i class="ti ti-target" aria-hidden="true"></i>Goal: Python developer</div>
+  <div class="profile-pill"><i class="ti ti-player-play" aria-hidden="true"></i>Videos + projects + reading</div>
+  <div class="profile-pill"><i class="ti ti-clock" aria-hidden="true"></i>~6–8 hrs/day available</div>
+</div>
+
+<div class="stats">
+  <div class="sc"><div class="sc-label">Days done</div><div class="sc-val" id="sd">0</div></div>
+  <div class="sc"><div class="sc-label">Remaining</div><div class="sc-val" id="sl">30</div></div>
+  <div class="sc"><div class="sc-label">Weeks</div><div class="sc-val">4</div></div>
+  <div class="sc"><div class="sc-label">Projects</div><div class="sc-val">4</div></div>
+</div>
+
+<div id="wc"></div>
+
+<div class="outcome">
+  <div class="out-title"><i class="ti ti-trophy" aria-hidden="true"></i>Final outcome — day 30</div>
+  <div class="out-grid">
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>OOP + clean code fluency</div>
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>Working REST API with FastAPI</div>
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>Database skills — SQL + ORM</div>
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>4 shipped GitHub projects</div>
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>Git workflow — branches, PRs</div>
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>Testing with pytest</div>
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>Deployed app on the web</div>
+    <div class="out-item"><i class="ti ti-check" aria-hidden="true"></i>Job-ready Python developer portfolio</div>
+  </div>
+</div>
+</div>
+
+<script>
+const weeks=[
+  {id:'b1',label:'Week 1',title:'Python mastery — OOP & clean code',
+   milestone:'Build CLI task manager; understand classes deeply',
+   days:[
+    {n:1,t:'Review Python basics — lists, dicts, functions, loops'},
+    {n:2,t:'OOP part 1 — classes, __init__, self, instance methods'},
+    {n:3,t:'OOP part 2 — inheritance, super(), method overriding'},
+    {n:4,t:'OOP part 3 — dunder methods, @property, encapsulation'},
+    {n:5,t:'File I/O — read/write JSON & CSV files'},
+    {n:6,t:'Error handling — try/except, custom exceptions'},
+    {n:7,t:'Build: CLI task manager (OOP + file persistence)'},
+   ],
+   resources:[
+    {l:'Python OOP – Corey Schafer',u:'https://www.youtube.com/playlist?list=PL-osiE80TeTsqhIuOqKhwlXsIBIdSeYtc',ic:'ti-player-play'},
+    {l:'Real Python – OOP',u:'https://realpython.com/python3-object-oriented-programming/',ic:'ti-book'},
+    {l:'CS50P – Harvard (free)',u:'https://cs50.harvard.edu/python/2022/',ic:'ti-school'},
+   ],
+   proj:{name:'CLI task manager',desc:'Add, complete, delete, and persist tasks via JSON. Demonstrates OOP design.',tags:['OOP','File I/O','argparse']}
+  },
+  {id:'b2',label:'Week 2',title:'Web fundamentals — HTTP, APIs & databases',
+   milestone:'Understand how the web works; query a real API; read/write a database',
+   days:[
+    {n:8,t:'How HTTP works — requests, responses, status codes'},
+    {n:9,t:'requests library — GET/POST, headers, JSON parsing'},
+    {n:10,t:'REST day: consume a public API (weather or GitHub API)'},
+    {n:11,t:'SQL fundamentals — SELECT, INSERT, JOIN, GROUP BY'},
+    {n:12,t:'SQLite with Python — sqlite3 module hands-on'},
+    {n:13,t:'Intro to SQLAlchemy ORM — models, sessions'},
+    {n:14,t:'Build: weather dashboard — API + SQLite storage'},
+   ],
+   resources:[
+    {l:'HTTP Crash Course – Traversy',u:'https://www.youtube.com/watch?v=iYM2zFP3Zn0',ic:'ti-player-play'},
+    {l:'SQLite Tutorial',u:'https://www.sqlitetutorial.net/',ic:'ti-book'},
+    {l:'SQLAlchemy Docs',u:'https://docs.sqlalchemy.org/en/20/orm/quickstart.html',ic:'ti-book'},
+   ],
+   proj:{name:'Weather dashboard',desc:'Fetches live weather, stores history in SQLite, shows trends in terminal.',tags:['requests','SQLite','ORM']}
+  },
+  {id:'b3',label:'Week 3',title:'FastAPI — build real backend services',
+   milestone:'Ship a REST API with auth, docs, and a real database behind it',
+   days:[
+    {n:15,t:'FastAPI intro — install, first endpoint, Pydantic models'},
+    {n:16,t:'Path params, query params, request body validation'},
+    {n:17,t:'Database integration — SQLAlchemy + FastAPI together'},
+    {n:18,t:'CRUD endpoints — GET/POST/PUT/DELETE patterns'},
+    {n:19,t:'Authentication — JWT tokens with python-jose'},
+    {n:20,t:'Testing APIs — pytest + httpx TestClient'},
+    {n:21,t:'Build: personal finance tracker API (full CRUD + auth)'},
+   ],
+   resources:[
+    {l:'FastAPI official docs',u:'https://fastapi.tiangolo.com/tutorial/',ic:'ti-book'},
+    {l:'FastAPI full course – freeCodeCamp',u:'https://www.youtube.com/watch?v=0sOvCWFmrtA',ic:'ti-player-play'},
+    {l:'pytest docs',u:'https://docs.pytest.org/en/stable/getting-started.html',ic:'ti-book'},
+   ],
+   proj:{name:'Finance tracker API',desc:'REST API to log income/expenses with JWT auth, full test coverage.',tags:['FastAPI','JWT','pytest','SQLAlchemy']}
+  },
+  {id:'b4',label:'Week 4',title:'Deployment, polish & job readiness',
+   milestone:'App live on the internet; portfolio complete; first applications sent',
+   days:[
+    {n:22,t:'Git deep dive — branching, merging, rebasing, PRs'},
+    {n:23,t:'Docker basics — Dockerfile, containers, docker-compose'},
+    {n:24,t:'Deploy to Railway or Render — env vars, logs, domains'},
+    {n:25,t:'GitHub Actions CI — auto-run tests on push'},
+    {n:26,t:'Write clean READMEs for all 3 previous projects'},
+    {n:27,t:'Build: portfolio site (FastAPI or simple HTML/CSS)'},
+    {n:28,t:'Resume: highlight projects; write 3 bullet points per project'},
+    {n:29,t:'LinkedIn — "Open to Work", add projects, connect ×10'},
+    {n:30,t:'Apply to 5 Python developer roles; send 5 cold DMs'},
+   ],
+   resources:[
+    {l:'Git branching — Learn Git Branching',u:'https://learngitbranching.js.org/',ic:'ti-brand-git'},
+    {l:'Docker in 100 seconds – Fireship',u:'https://www.youtube.com/watch?v=Gjnup-PuquQ',ic:'ti-player-play'},
+    {l:'Railway (free deploy)',u:'https://railway.app/',ic:'ti-server'},
+   ],
+   proj:{name:'Portfolio site + deployed API',desc:'Live URL on your resume. GitHub Actions runs tests automatically on every push.',tags:['Docker','Railway','GitHub Actions','CI/CD']}
+  }
+];
+
+const done=new Set();
+try{JSON.parse(localStorage.getItem('rdmp2_done')||'[]').forEach(k=>done.add(k))}catch(e){}
+function save(){try{localStorage.setItem('rdmp2_done',JSON.stringify([...done]))}catch(e){}}
+function updateStats(){
+  const d=done.size;
+  document.getElementById('sd').textContent=d;
+  document.getElementById('sl').textContent=Math.max(0,30-d);
+  const p=Math.round(d/30*100);
+  document.getElementById('pbar').style.width=p+'%';
+  document.getElementById('ppct').textContent=p+'%';
+}
+window.toggleDay=function(el,k){
+  if(done.has(k)){done.delete(k);el.classList.remove('done')}
+  else{done.add(k);el.classList.add('done')}
+  save();updateStats();
+  const hd=el.closest('.wk').querySelector('.wk-meta');
+  const cards=el.closest('.wk').querySelectorAll('.dc');
+  let d=0;cards.forEach(c=>{if(c.classList.contains('done'))d++});
+  hd.textContent=d+'/'+cards.length+' days';
+};
+window.toggleWeek=function(h){
+  const b=h.nextElementSibling;
+  const ch=h.querySelector('.wk-chev');
+  b.classList.toggle('col');
+  ch.style.transform=b.classList.contains('col')?'':'rotate(180deg)';
+};
+const wc=document.getElementById('wc');
+weeks.forEach((w,wi)=>{
+  const el=document.createElement('div');
+  el.className='wk '+w.id;
+  const daysHTML=w.days.map(d=>`<div class="dc" data-key="${d.n}" onclick="toggleDay(this,${d.n})">
+    <div class="dn"><span>Day ${d.n}</span><div class="dck"><i class="ti ti-check" aria-hidden="true"></i></div></div>
+    <div class="dt">${d.t}</div>
+  </div>`).join('');
+  const resHTML=w.resources.map(r=>`<a href="${r.u}" class="rpill" target="_blank"><i class="ti ${r.ic}" aria-hidden="true"></i>${r.l}</a>`).join('');
+  const tagsHTML=w.proj.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+  el.innerHTML=`<div class="wk-head" onclick="toggleWeek(this)">
+    <span class="wk-badge">${w.label}</span>
+    <span class="wk-title">${w.title}</span>
+    <span class="wk-meta">0/${w.days.length} days</span>
+    <i class="ti ti-chevron-down wk-chev" aria-hidden="true"></i>
+  </div>
+  <div class="wk-body${wi>0?' col':''}">
+    <div class="ms-tag"><i class="ti ti-flag-2" aria-hidden="true" style="font-size:12px;margin-right:4px"></i>${w.milestone}</div>
+    <div class="sec">Daily tasks</div>
+    <div class="days">${daysHTML}</div>
+    <div class="sec">Resources</div>
+    <div class="res-row">${resHTML}</div>
+    <div class="sec" style="margin-top:1rem">Project this week</div>
+    <div class="proj">
+      <div class="proj-name"><i class="ti ti-code-circle" aria-hidden="true" style="font-size:15px;margin-right:6px;color:#534AB7;vertical-align:-2px"></i>${w.proj.name}</div>
+      <div class="proj-desc">${w.proj.desc}</div>
+      <div class="tag-row">${tagsHTML}</div>
+    </div>
+  </div>`;
+  wc.appendChild(el);
+});
+done.forEach(k=>{const el=document.querySelector(`[data-key="${k}"]`);if(el)el.classList.add('done')});
+updateStats();
+</script>
