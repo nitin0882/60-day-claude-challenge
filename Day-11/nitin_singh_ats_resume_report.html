@@ -1,0 +1,123 @@
+
+<style>
+  .report-wrap { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .profile-card { background: #0f1b2d; border-radius: var(--border-radius-lg); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .avatar { width: 52px; height: 52px; border-radius: 50%; background: #1e3a5f; display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 16px; color: #7ab3e8; flex-shrink: 0; }
+  .profile-info p { margin: 0; }
+  .profile-name { font-size: 18px; font-weight: 500; color: #ffffff; }
+  .profile-sub { font-size: 13px; color: #7ab3e8; margin-top: 2px !important; }
+  .profile-loc { font-size: 12px; color: #5a7fa8; margin-top: 1px !important; }
+  .linkedin-btn { margin-left: auto; background: #2563eb; color: #ffffff; border: none; border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 500; cursor: pointer; }
+
+  .section-card { background: #111c2d; border-radius: var(--border-radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+  .section-title { font-size: 13px; font-weight: 500; color: #ffffff; margin: 0 0 1rem; letter-spacing: 0.04em; }
+
+  .score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .score-label { font-size: 13px; color: #7ab3e8; width: 38px; }
+  .bar-track { flex: 1; background: #1e3a5f; border-radius: 99px; height: 12px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; }
+  .bar-before { width: 82%; background: #e24b4a; }
+  .bar-after { width: 92%; background: #1d9e75; }
+  .score-num { font-size: 13px; font-weight: 500; color: #7ab3e8; width: 52px; text-align: right; }
+
+  .three-col { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-bottom: 1.25rem; }
+  .feat-card { background: #111c2d; border-radius: var(--border-radius-lg); padding: 1rem 1.1rem; border-top: 3px solid; }
+  .feat-card.purple { border-color: #7f77dd; }
+  .feat-card.green  { border-color: #639922; }
+  .feat-card.amber  { border-color: #ba7517; }
+  .feat-title { font-size: 11px; font-weight: 500; color: #ffffff; margin: 0 0 8px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .feat-item { font-size: 11.5px; color: #7ab3e8; margin: 3px 0; }
+
+  .stack-label { font-size: 13px; font-weight: 500; color: #ffffff; margin: 0 0 10px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .badge { background: #1e3a5f; color: #7ab3e8; border-radius: 99px; padding: 5px 13px; font-size: 12px; font-weight: 400; }
+
+  .takeaway { background: #111c2d; border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1.25rem; display: flex; gap: 10px; align-items: flex-start; }
+  .takeaway-icon { font-size: 20px; color: #7ab3e8; margin-top: 1px; flex-shrink: 0; }
+  .takeaway-text { font-size: 13px; color: #7ab3e8; line-height: 1.6; margin: 0; }
+
+  .hashtags { font-size: 12px; color: #2563eb; line-height: 1.9; }
+
+  .footer { text-align: center; font-size: 11.5px; color: #3a5a7a; margin-top: 1.25rem; border-top: 0.5px solid #1e3a5f; padding-top: 1rem; }
+  .footer span { color: #2563eb; }
+</style>
+
+<div class="report-wrap">
+
+  <div class="profile-card">
+    <div class="avatar">NS</div>
+    <div class="profile-info">
+      <p class="profile-name">Nitin Singh</p>
+      <p class="profile-sub">MCA Student · Full Stack & AI Developer</p>
+      <p class="profile-loc">Ghaziabad, India</p>
+    </div>
+    <button class="linkedin-btn" onclick="openLink('https://linkedin.com')">LinkedIn</button>
+  </div>
+
+  <div class="section-card">
+    <p class="section-title">🏆 ATS MATCH SCORE</p>
+    <div class="score-row">
+      <span class="score-label">Before</span>
+      <div class="bar-track"><div class="bar-fill bar-before"></div></div>
+      <span class="score-num">78 / 100</span>
+    </div>
+    <div class="score-row">
+      <span class="score-label">After</span>
+      <div class="bar-track"><div class="bar-fill bar-after"></div></div>
+      <span class="score-num">92 / 100</span>
+    </div>
+  </div>
+
+  <p style="font-size:14px; font-weight:500; color: var(--color-text-primary); margin: 0 0 10px;">What was done:</p>
+  <div class="three-col">
+    <div class="feat-card purple">
+      <p class="feat-title">ATS Gap Analysis</p>
+      <p class="feat-item">Missing keywords found</p>
+      <p class="feat-item">REST API · Flask</p>
+      <p class="feat-item">Git · LLM · Testing</p>
+    </div>
+    <div class="feat-card green">
+      <p class="feat-title">Resume Rewrite</p>
+      <p class="feat-item">Professional summary</p>
+      <p class="feat-item">Strong action verbs</p>
+      <p class="feat-item">JD-aligned keywords</p>
+    </div>
+    <div class="feat-card amber">
+      <p class="feat-title">Word Doc Output</p>
+      <p class="feat-item">ATS-friendly format</p>
+      <p class="feat-item">Ready for FlowCV</p>
+      <p class="feat-item">Overleaf · Word · Canva</p>
+    </div>
+  </div>
+
+  <div class="section-card" style="margin-bottom:1.25rem;">
+    <p class="stack-label">Tech stack highlighted:</p>
+    <div class="badge-row">
+      <span class="badge">Python</span>
+      <span class="badge">JavaScript</span>
+      <span class="badge">HTML5 / CSS3</span>
+      <span class="badge">Streamlit</span>
+      <span class="badge">Ollama / Phi-3</span>
+      <span class="badge">SQLite</span>
+      <span class="badge">Pandas</span>
+      <span class="badge">REST APIs</span>
+      <span class="badge">TMDB API</span>
+      <span class="badge">C++</span>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <i class="ti ti-robot takeaway-icon" aria-hidden="true"></i>
+    <p class="takeaway-text">Key takeaway: Never fabricate — only optimize and realign your existing experience with relevant JD keywords.</p>
+  </div>
+
+  <div class="hashtags">
+    #Python &nbsp;#FullStack &nbsp;#AIDeveloper &nbsp;#ATS &nbsp;#ResumeBuilding<br>
+    #LLM &nbsp;#Streamlit &nbsp;#MCA &nbsp;#JobSearch &nbsp;#CareerGrowth
+  </div>
+
+  <div class="footer">
+    Built with <span>Claude AI</span> · Resume optimized using ATS alignment &amp; gap analysis
+  </div>
+
+</div>
