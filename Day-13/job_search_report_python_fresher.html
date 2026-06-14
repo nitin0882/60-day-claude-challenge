@@ -1,0 +1,205 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); color: var(--color-text-primary); }
+.section { margin-bottom: 2rem; }
+.section-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px 16px; }
+.metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; }
+.metric-value { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+.metric-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: 4px; }
+.job-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 10px; }
+.job-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.job-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+.job-company { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+.score-badge { font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: var(--border-radius-md); white-space: nowrap; }
+.score-high { background: #EAF3DE; color: #3B6D11; }
+.score-mid { background: #FAEEDA; color: #854F0B; }
+.job-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.tag { font-size: 12px; padding: 3px 8px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-secondary); display: flex; align-items: center; gap: 4px; }
+.job-fit { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: 10px; }
+.apply-btn { display: inline-block; font-size: 12px; font-weight: 500; color: #185FA5; text-decoration: none; padding: 5px 12px; border: 0.5px solid #B5D4F4; border-radius: var(--border-radius-md); background: #E6F1FB; }
+.skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.skill-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.skill-name { min-width: 120px; color: var(--color-text-primary); }
+.skill-bar-bg { flex: 1; height: 6px; background: var(--color-background-secondary); border-radius: 3px; overflow: hidden; }
+.skill-bar { height: 100%; border-radius: 3px; }
+.skill-pct { font-size: 12px; color: var(--color-text-secondary); min-width: 32px; text-align: right; }
+.gap-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.gap-item:last-child { border-bottom: none; }
+.gap-icon { width: 28px; height: 28px; border-radius: var(--border-radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.gap-icon.missing { background: #FCEBEB; color: #A32D2D; }
+.gap-icon.partial { background: #FAEEDA; color: #854F0B; }
+.gap-text { flex: 1; }
+.gap-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
+.gap-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+.rec-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 12px 14px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; }
+.rec-num { font-size: 12px; font-weight: 500; color: var(--color-text-tertiary); min-width: 20px; }
+.rec-text { font-size: 13px; color: var(--color-text-primary); line-height: 1.6; }
+.overall-bar { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 16px; }
+.fit-score-circle { width: 60px; height: 60px; border-radius: 50%; background: #EAF3DE; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+.fit-score-num { font-size: 20px; font-weight: 500; color: #3B6D11; line-height: 1; }
+.fit-score-label { font-size: 10px; color: #3B6D11; }
+.fit-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+.profile-banner { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 2rem; display: flex; gap: 16px; align-items: center; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; background: #EEEDFE; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500; color: #534AB7; flex-shrink: 0; }
+.profile-info { flex: 1; }
+.profile-name { font-size: 15px; font-weight: 500; }
+.profile-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.ptag { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: #EEEDFE; color: #534AB7; }
+</style>
+
+<div style="padding: 1rem 0;">
+
+<div class="profile-banner">
+  <div class="avatar">PY</div>
+  <div class="profile-info">
+    <div class="profile-name">Python / Software Engineering — Entry Level</div>
+    <div style="font-size: 13px; color: var(--color-text-secondary); margin-top: 2px;">Delhi NCR / Pan-India · Open to all arrangements · Up to ₹6 LPA target</div>
+    <div class="profile-tags">
+      <span class="ptag">Python</span>
+      <span class="ptag">Django / Flask / FastAPI</span>
+      <span class="ptag">Fresher</span>
+      <span class="ptag">Pan-India</span>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Market snapshot</div>
+  <div class="metric-grid">
+    <div class="metric"><div class="metric-label">Active Python fresher jobs</div><div class="metric-value">8,400+</div><div class="metric-sub">Across India (foundit.in)</div></div>
+    <div class="metric"><div class="metric-label">Jobs in Delhi NCR / Noida</div><div class="metric-value">170+</div><div class="metric-sub">Glassdoor, Indeed, Internshala</div></div>
+    <div class="metric"><div class="metric-label">Avg. fresher CTC (Delhi)</div><div class="metric-value">₹5.9L</div><div class="metric-sub">PayScale 2026</div></div>
+    <div class="metric"><div class="metric-label">Your CTC target fit</div><div class="metric-value">✓ Good</div><div class="metric-sub">Market median aligns</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Top job opportunities — ranked by fit</div>
+
+  <div class="job-card">
+    <div class="job-header">
+      <div><div class="job-title">Trainee Engineer — GenAI / Python Full Stack</div><div class="job-company">Impressico Business Solutions · Noida / Hyderabad</div></div>
+      <span class="score-badge score-high">95% match</span>
+    </div>
+    <div class="job-meta">
+      <span class="tag"><i class="ti ti-map-pin" aria-hidden="true"></i> Noida (Hybrid)</span>
+      <span class="tag"><i class="ti ti-currency-rupee" aria-hidden="true"></i> ₹4 LPA + probation stipend ₹20k/mo</span>
+      <span class="tag"><i class="ti ti-calendar" aria-hidden="true"></i> Posted June 2026</span>
+    </div>
+    <div class="job-fit">Directly targets Python/FastAPI/Django/Flask freshers. Data pipelines, AI-driven apps, REST APIs, and Git are explicitly listed — all overlap with your roadmap. Converts to full-time after 6-month probation. 2024/2025/2026 graduates eligible.</div>
+    <a class="apply-btn" href="https://internshala.com/fresher-jobs/python-django-jobs-in-noida/" target="_blank">Apply on Internshala <i class="ti ti-external-link" aria-hidden="true"></i></a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-header">
+      <div><div class="job-title">Junior Python Developer (Backend)</div><div class="job-company">TrainingMug · Remote / Delhi NCR</div></div>
+      <span class="score-badge score-high">90% match</span>
+    </div>
+    <div class="job-meta">
+      <span class="tag"><i class="ti ti-map-pin" aria-hidden="true"></i> Remote-friendly</span>
+      <span class="tag"><i class="ti ti-currency-rupee" aria-hidden="true"></i> Up to ₹5 LPA (est.)</span>
+      <span class="tag"><i class="ti ti-calendar" aria-hidden="true"></i> Posted May 2026</span>
+    </div>
+    <div class="job-fit">EdTech startup building AI-powered learning tools. Needs Flask, REST APIs — a strong match. Ideal for freshers wanting real product experience quickly. Explicitly listed as suitable for freshers and early-stage developers.</div>
+    <a class="apply-btn" href="https://internshala.com/jobs/python-django-jobs/" target="_blank">Apply on Internshala <i class="ti ti-external-link" aria-hidden="true"></i></a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-header">
+      <div><div class="job-title">SDE I — Backend (Python / Django)</div><div class="job-company">Early-stage startup · Noida / Gurgaon (multiple listings)</div></div>
+      <span class="score-badge score-high">88% match</span>
+    </div>
+    <div class="job-meta">
+      <span class="tag"><i class="ti ti-map-pin" aria-hidden="true"></i> Noida / Gurgaon</span>
+      <span class="tag"><i class="ti ti-currency-rupee" aria-hidden="true"></i> ₹4–6 LPA</span>
+      <span class="tag"><i class="ti ti-calendar" aria-hidden="true"></i> Active June 2026</span>
+    </div>
+    <div class="job-fit">Multiple SDE-I openings across Noida/Gurgaon startups for Python/Django/Flask backend. Requires clean code, REST APIs, relational DBs, Git — all achievable with your current stack. Great stepping stone into product companies.</div>
+    <a class="apply-btn" href="https://in.indeed.com/q-python-developer-l-noida,-uttar-pradesh-jobs.html" target="_blank">Browse on Indeed <i class="ti ti-external-link" aria-hidden="true"></i></a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-header">
+      <div><div class="job-title">Python Developer — Automation & CRM</div><div class="job-company">Real estate tech firm · Saket, New Delhi</div></div>
+      <span class="score-badge score-high">82% match</span>
+    </div>
+    <div class="job-meta">
+      <span class="tag"><i class="ti ti-map-pin" aria-hidden="true"></i> Saket, New Delhi (Onsite)</span>
+      <span class="tag"><i class="ti ti-currency-rupee" aria-hidden="true"></i> ₹3.5–5 LPA (est.)</span>
+      <span class="tag"><i class="ti ti-calendar" aria-hidden="true"></i> Walk-in / Active</span>
+    </div>
+    <div class="job-fit">Internal automation, CRM integrations, data management using Python. Freshers with strong fundamentals welcome. Great for those in Ghaziabad / South Delhi area. Hands-on Python scripting and real-world business exposure.</div>
+    <a class="apply-btn" href="https://in.indeed.com/q-walk-in-interview-for-freshers,python-l-delhi,-delhi-jobs.html" target="_blank">Browse on Indeed <i class="ti ti-external-link" aria-hidden="true"></i></a>
+  </div>
+
+  <div class="job-card">
+    <div class="job-header">
+      <div><div class="job-title">AI Intern / Junior AI Developer</div><div class="job-company">Teckinfo Solution Pvt Ltd · Bhikaji Cama Place, Delhi</div></div>
+      <span class="score-badge score-mid">78% match</span>
+    </div>
+    <div class="job-meta">
+      <span class="tag"><i class="ti ti-map-pin" aria-hidden="true"></i> Bhikaji Cama Place, Delhi</span>
+      <span class="tag"><i class="ti ti-currency-rupee" aria-hidden="true"></i> Stipend + PPO potential</span>
+      <span class="tag"><i class="ti ti-calendar" aria-hidden="true"></i> Active June 2026</span>
+    </div>
+    <div class="job-fit">Exposure to Chatbots, GenAI, Agentic AI with Python backend. Slight skill gap in AI frameworks, but your Python/roadmap foundation makes you a realistic candidate. Strong PPO culture. Great resume builder for 2026 AI market.</div>
+    <a class="apply-btn" href="https://in.indeed.com/q-python-fresher-l-delhi,-delhi-jobs.html" target="_blank">Browse on Indeed <i class="ti ti-external-link" aria-hidden="true"></i></a>
+  </div>
+
+</div>
+
+<div class="section">
+  <div class="section-title">Most commonly required skills (across Delhi NCR Python jobs)</div>
+  <div class="skills-grid">
+    <div class="skill-row"><span class="skill-name">Python (core)</span><div class="skill-bar-bg"><div class="skill-bar" style="width:96%; background:#3B6D11;"></div></div><span class="skill-pct">96%</span></div>
+    <div class="skill-row"><span class="skill-name">REST APIs</span><div class="skill-bar-bg"><div class="skill-bar" style="width:84%; background:#3B6D11;"></div></div><span class="skill-pct">84%</span></div>
+    <div class="skill-row"><span class="skill-name">Django / Flask / FastAPI</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%; background:#3B6D11;"></div></div><span class="skill-pct">80%</span></div>
+    <div class="skill-row"><span class="skill-name">SQL / PostgreSQL / MySQL</span><div class="skill-bar-bg"><div class="skill-bar" style="width:75%; background:#639922;"></div></div><span class="skill-pct">75%</span></div>
+    <div class="skill-row"><span class="skill-name">Git & GitHub</span><div class="skill-bar-bg"><div class="skill-bar" style="width:72%; background:#639922;"></div></div><span class="skill-pct">72%</span></div>
+    <div class="skill-row"><span class="skill-name">Docker / containerization</span><div class="skill-bar-bg"><div class="skill-bar" style="width:52%; background:#BA7517;"></div></div><span class="skill-pct">52%</span></div>
+    <div class="skill-row"><span class="skill-name">AWS / cloud basics</span><div class="skill-bar-bg"><div class="skill-bar" style="width:45%; background:#BA7517;"></div></div><span class="skill-pct">45%</span></div>
+    <div class="skill-row"><span class="skill-name">ML / AI basics</span><div class="skill-bar-bg"><div class="skill-bar" style="width:40%; background:#BA7517;"></div></div><span class="skill-pct">40%</span></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Skill gap analysis (vs. your current profile)</div>
+  <div class="gap-item">
+    <div class="gap-icon missing"><i class="ti ti-database" aria-hidden="true"></i></div>
+    <div class="gap-text"><div class="gap-title">SQL — critical gap</div><div class="gap-desc">Required in 75% of listings. Your roadmap already identifies this as Week 1–2. Prioritise SQLZoo / Mode Analytics immediately — this single skill unlocks the majority of roles.</div></div>
+  </div>
+  <div class="gap-item">
+    <div class="gap-icon missing"><i class="ti ti-brand-git" aria-hidden="true"></i></div>
+    <div class="gap-text"><div class="gap-title">Git & GitHub — critical gap</div><div class="gap-desc">Every employer checks this. No public GitHub = invisible to technical recruiters. Your roadmap places this in Week 9–10 — consider moving it to Week 1 alongside SQL.</div></div>
+  </div>
+  <div class="gap-item">
+    <div class="gap-icon partial"><i class="ti ti-box" aria-hidden="true"></i></div>
+    <div class="gap-text"><div class="gap-title">Docker — partial gap</div><div class="gap-desc">Appears in ~52% of JDs, especially startups. Basic containerisation knowledge (build, run, push) is enough for fresher roles. A free Docker 101 course addresses this in ~4 hours.</div></div>
+  </div>
+  <div class="gap-item">
+    <div class="gap-icon partial"><i class="ti ti-cloud" aria-hidden="true"></i></div>
+    <div class="gap-text"><div class="gap-title">Cloud basics (AWS / GCP) — partial gap</div><div class="gap-desc">Nice-to-have at fresher level, not blocking. AWS Free Tier + deploying one Flask app to EC2 or Render.com is sufficient to mention on your CV and LinkedIn.</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Recommendations to improve interview chances</div>
+  <div class="rec-card"><span class="rec-num">1</span><span class="rec-text">Move Git to Week 1 — create your GitHub today, push even basic scripts. Recruiters screen GitHub before interviews. A blank profile loses you roles before they even see your resume.</span></div>
+  <div class="rec-card"><span class="rec-num">2</span><span class="rec-text">Build and deploy one visible project end-to-end (e.g. a Flask REST API deployed on Render or Railway). A live URL on your resume beats 10 offline projects.</span></div>
+  <div class="rec-card"><span class="rec-num">3</span><span class="rec-text">Apply on Internshala and Cutshort — both are strong for Delhi NCR startups hiring Python freshers. Set job alerts for "Python developer", "SDE-I Python", and "Django fresher".</span></div>
+  <div class="rec-card"><span class="rec-num">4</span><span class="rec-text">Optimise LinkedIn headline to "Python Developer | Django | Flask | REST APIs | Open to Work" and turn on Open to Work. Recruiters from Noida/Gurgaon actively search these keywords.</span></div>
+  <div class="rec-card"><span class="rec-num">5</span><span class="rec-text">Target ₹3.5–5 LPA as your realistic first-offer range (CTC). Your ₹6 LPA ceiling is achievable after 6–12 months of experience, or immediately at a product startup if you have strong GitHub projects.</span></div>
+</div>
+
+<div class="section">
+  <div class="section-title">Overall fit assessment</div>
+  <div class="overall-bar">
+    <div class="fit-score-circle"><div class="fit-score-num">B+</div><div class="fit-score-label">fit</div></div>
+    <div class="fit-desc">Your Python/Django/Flask/FastAPI stack is well-aligned with Delhi NCR's fresher market. The two critical blockers — SQL and a public GitHub portfolio — are already on your roadmap. Close these in the first 2 weeks and you move to an A-tier candidate. Your ₹6 LPA ceiling is realistic; the Noida/Gurgaon startup ecosystem regularly offers ₹4–6 LPA to freshers with a visible GitHub and deployed project. Salary growth to ₹8–10 LPA typically happens at the 12–18 month mark with ML/cloud skills added.</div>
+  </div>
+</div>
+
+</div>
