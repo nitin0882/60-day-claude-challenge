@@ -1,0 +1,172 @@
+
+<style>
+  .rf-root { padding: 1rem 0; font-size: 14px; color: var(--color-text-primary); }
+  .score-row { display: flex; align-items: center; gap: 16px; margin-bottom: 1.5rem; }
+  .score-circle { width: 72px; height: 72px; border-radius: 50%; background: var(--color-background-danger); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+  .score-num { font-size: 26px; font-weight: 500; color: var(--color-text-danger); line-height: 1; }
+  .score-label { font-size: 11px; color: var(--color-text-danger); }
+  .score-meta { }
+  .score-title { font-size: 18px; font-weight: 500; margin: 0 0 4px; }
+  .score-sub { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin: 1.5rem 0 0.6rem; }
+  .flag-card { background: var(--color-background-danger); border: 0.5px solid var(--color-border-danger); border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; }
+  .flag-badge { background: var(--color-text-danger); color: #fff; font-size: 11px; font-weight: 500; border-radius: 4px; padding: 2px 7px; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+  .flag-text { font-size: 13px; color: var(--color-text-danger); line-height: 1.5; }
+  .flag-detail { font-size: 12px; color: var(--color-text-danger); opacity: 0.75; margin-top: 3px; }
+  .pos-card { background: var(--color-background-success); border: 0.5px solid var(--color-border-success); border-radius: var(--border-radius-md); padding: 8px 14px; margin-bottom: 6px; font-size: 13px; color: var(--color-text-success); display: flex; gap: 8px; align-items: center; }
+  table.risk-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 0.5rem; }
+  table.risk-table th { text-align: left; color: var(--color-text-secondary); font-weight: 500; padding: 6px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  table.risk-table td { padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .pill { display: inline-block; border-radius: 20px; padding: 3px 10px; font-size: 12px; font-weight: 500; }
+  .pill-critical { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .pill-high { background: #FAC775; color: #633806; }
+  .pill-medium { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .pill-low { background: var(--color-background-success); color: var(--color-text-success); }
+  .verdict { border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-danger); background: var(--color-background-danger); padding: 14px 18px; margin: 1.2rem 0; display: flex; align-items: center; gap: 12px; }
+  .verdict-icon { font-size: 28px; }
+  .verdict-label { font-size: 16px; font-weight: 500; color: var(--color-text-danger); margin: 0; }
+  .verdict-sub { font-size: 12px; color: var(--color-text-danger); opacity: 0.8; margin: 3px 0 0; }
+  .iq-card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 7px; display: flex; gap: 10px; align-items: flex-start; cursor: pointer; transition: background 0.15s; }
+  .iq-card:hover { background: var(--color-background-primary); }
+  .iq-num { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); min-width: 18px; }
+  .iq-text { font-size: 13px; line-height: 1.5; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.2rem 0; }
+  .warning-banner { background: #FAC775; border-radius: var(--border-radius-md); padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: #412402; font-weight: 500; display: flex; gap: 8px; align-items: center; }
+</style>
+
+<div class="rf-root">
+  <h2 class="sr-only">Red Flag Analysis for Brain Technosys Python Intern role</h2>
+
+  <div class="warning-banner">
+    <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+    ⚠️ Contains potentially predatory employment terms — read carefully before applying
+  </div>
+
+  <div class="score-row">
+    <div class="score-circle">
+      <span class="score-num">82</span>
+      <span class="score-label">/ 100</span>
+    </div>
+    <div class="score-meta">
+      <p class="score-title">Very High Risk</p>
+      <p class="score-sub">Multiple critical red flags detected — including a bond clause, blank cheques, and original documents held as collateral.</p>
+    </div>
+  </div>
+
+  <div class="section-title">🚩 Top Red Flags</div>
+
+  <div class="flag-card">
+    <span class="flag-badge">10 / 10</span>
+    <div>
+      <div class="flag-text">Blank cheque submission demanded</div>
+      <div class="flag-detail">Asking candidates to submit signed blank cheques is a serious legal and financial risk. A company can fill in any amount later. This practice is widely used in unethical bond enforcement and may be illegal under Indian labour law (Payment of Wages Act, Contract Labour Act).</div>
+    </div>
+  </div>
+
+  <div class="flag-card">
+    <span class="flag-badge">10 / 10</span>
+    <div>
+      <div class="flag-text">Original educational documents held as collateral</div>
+      <div class="flag-detail">Retaining original 10th & 12th mark sheets prevents you from applying elsewhere for 2.6 years. This is a coercive retention tactic — India's Ministry of Labour has explicitly stated this is illegal under the Bonded Labour System (Abolition) Act, 1976.</div>
+    </div>
+  </div>
+
+  <div class="flag-card">
+    <span class="flag-badge">9 / 10</span>
+    <div>
+      <div class="flag-text">2.6-year mandatory service bond</div>
+      <div class="flag-detail">A 2.6-year lock-in for a ₹10,000/month internship is disproportionate. Legitimate companies offering genuine training rarely enforce such long bonds — and if they do, they compensate fairly. Courts in India frequently void one-sided service bonds as unenforceable.</div>
+    </div>
+  </div>
+
+  <div class="flag-card">
+    <span class="flag-badge">8 / 10</span>
+    <div>
+      <div class="flag-text">₹10,000/month stipend for 6 months — below minimum wage in many states</div>
+      <div class="flag-detail">For a B.Tech / MCA graduate doing real development work, ₹10,000/month is exploitative — especially tied to a 2.6-year bond. Industry standard for Python interns is ₹15,000–₹35,000/month even at small companies.</div>
+    </div>
+  </div>
+
+  <div class="flag-card">
+    <span class="flag-badge">7 / 10</span>
+    <div>
+      <div class="flag-text">Post-training CTC of ₹2.5–3 LPA is well below market</div>
+      <div class="flag-detail">Entry-level Python developers in India earn ₹3.5–6 LPA at the low end. ₹2.5 LPA after 6 months of training and a 2.6-year bond is significantly below market — you'd be locked in at a disadvantage.</div>
+    </div>
+  </div>
+
+  <div class="flag-card">
+    <span class="flag-badge">6 / 10</span>
+    <div>
+      <div class="flag-text">No mention of bond penalty amount</div>
+      <div class="flag-detail">The agreement mentions a 2.6-year service term but doesn't state the financial penalty for leaving early. Combined with blank cheques, this gives the company unchecked power to set the penalty amount retroactively.</div>
+    </div>
+  </div>
+
+  <div class="flag-card">
+    <span class="flag-badge">5 / 10</span>
+    <div>
+      <div class="flag-text">Incomplete job location — no city mentioned</div>
+      <div class="flag-detail">"G-84, Sector 63" without a city name is a minor opacity signal. Sector 63 is likely Noida, UP — but not stating it clearly makes relocation terms vague.</div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="section-title">✅ Positive Signals</div>
+  <div class="pos-card"><i class="ti ti-check" aria-hidden="true"></i> Realistic skill requirements — basic Python, OOP, SQL is appropriate for an intern role</div>
+  <div class="pos-card"><i class="ti ti-check" aria-hidden="true"></i> Clear eligibility criteria (2025 & 2026 pass-outs)</div>
+  <div class="pos-card"><i class="ti ti-check" aria-hidden="true"></i> Defined training-to-employment pathway with stated CTC range</div>
+  <div class="pos-card"><i class="ti ti-check" aria-hidden="true"></i> Responsibilities are reasonable and appropriate for internship level</div>
+
+  <hr class="divider"/>
+
+  <div class="section-title">📊 Risk Breakdown</div>
+  <table class="risk-table">
+    <thead><tr><th>Category</th><th>Risk Level</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Requirements</td><td><span class="pill pill-low">Low</span></td><td>Appropriate for intern role</td></tr>
+      <tr><td>Culture / Workplace</td><td><span class="pill pill-medium">Medium</span></td><td>No explicit red flags, but bond culture is toxic</td></tr>
+      <tr><td>Remote / Location</td><td><span class="pill pill-medium">Medium</span></td><td>In-person assumed; location incomplete</td></tr>
+      <tr><td>Hiring Practices</td><td><span class="pill pill-critical">Critical</span></td><td>Blank cheques + document retention</td></tr>
+      <tr><td>Compensation</td><td><span class="pill pill-high">High</span></td><td>Below market, tied to a long bond</td></tr>
+      <tr><td>Legal / Compliance</td><td><span class="pill pill-critical">Critical</span></td><td>Potentially violates Indian labour law</td></tr>
+    </tbody>
+  </table>
+
+  <hr class="divider"/>
+
+  <div class="verdict">
+    <span class="verdict-icon">❌</span>
+    <div>
+      <p class="verdict-label">Avoid — Do Not Apply As Is</p>
+      <p class="verdict-sub">The blank cheque and original document requirements alone make this offer dangerous. No legitimate employer needs these. These are hallmarks of predatory bond schemes widely reported in Indian IT job markets.</p>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="section-title">💬 5 Smart Interview Questions</div>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin:0 0 0.8rem;">Ask these if you still choose to interview — their answers will reveal intent. Click to send to Claude for follow-up coaching.</p>
+
+  <div class="iq-card" onclick="sendPrompt('Help me understand the legal standing of blank cheque submission in Indian employment contracts and how I should respond if asked to provide one')">
+    <span class="iq-num">1</span>
+    <div class="iq-text">"Can you explain why the company needs blank cheques, and who is authorised to fill them in? Is there an indemnity clause protecting me if the cheque is misused?"</div>
+  </div>
+  <div class="iq-card" onclick="sendPrompt('Help me negotiate around the original document retention clause in an Indian internship contract')">
+    <span class="iq-num">2</span>
+    <div class="iq-text">"What happens to my original mark sheets if I need to apply for a postgraduate programme or another job during the 2.6-year period? Can I get certified copies instead?"</div>
+  </div>
+  <div class="iq-card" onclick="sendPrompt('What is the typical financial penalty in IT service bonds in India and is it legally enforceable?')">
+    <span class="iq-num">3</span>
+    <div class="iq-text">"What is the specific penalty amount if I leave before the 2.6-year service period ends, and has your company ever taken legal action to enforce this bond?"</div>
+  </div>
+  <div class="iq-card" onclick="sendPrompt('What is the average CTC for a Python developer with 2-3 years of experience in Noida in 2025?')">
+    <span class="iq-num">4</span>
+    <div class="iq-text">"Is the ₹2.5–3 LPA CTC fixed or a starting range? What is the typical salary progression after the first year, and are there performance-based increments?"</div>
+  </div>
+  <div class="iq-card" onclick="sendPrompt('Draft a professional email asking an employer to remove the blank cheque and original document clauses from an internship offer')">
+    <span class="iq-num">5</span>
+    <div class="iq-text">"Would the company be willing to replace the document and cheque requirements with a signed bond agreement witnessed by a notary, which would be legally equivalent but protect both parties?"</div>
+  </div>
+</div>
