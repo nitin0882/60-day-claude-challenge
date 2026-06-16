@@ -1,0 +1,184 @@
+
+<style>
+  .section { margin-bottom: 2rem; }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; padding-bottom: 6px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.85rem 1rem; }
+  .metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .metric-value { font-size: 18px; font-weight: 500; color: var(--color-text-primary); }
+  .metric-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+  .planet-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
+  .planet-row:last-child { border-bottom: none; }
+  .planet-name { font-weight: 500; color: var(--color-text-primary); min-width: 80px; }
+  .planet-pos { color: var(--color-text-secondary); font-size: 12px; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: var(--border-radius-md); font-weight: 500; }
+  .badge-info { background: var(--color-background-info); color: var(--color-text-info); }
+  .badge-warn { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-success { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-danger { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .dasha-bar { height: 8px; border-radius: 4px; background: var(--color-background-secondary); position: relative; overflow: visible; margin: 4px 0; }
+  .dasha-fill { height: 100%; border-radius: 4px; }
+  .yoga-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 13px; }
+  .yoga-item:last-child { border-bottom: none; }
+  .chart-house { font-size: 11px; text-align: center; }
+  .north-chart { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 60px); gap: 1px; background: var(--color-border-tertiary); border: 1px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); overflow: hidden; }
+  .house-cell { background: var(--color-background-primary); padding: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: var(--color-text-secondary); }
+  .house-cell.lagna-cell { background: var(--color-background-info); }
+  .house-num { font-size: 9px; font-weight: 500; color: var(--color-text-tertiary); }
+  .planet-sym { font-size: 11px; color: var(--color-text-primary); font-weight: 500; }
+  .corner { background: var(--color-background-secondary) !important; }
+</style>
+
+<div style="padding: 1rem 0;">
+
+  <div class="section">
+    <div class="section-title">birth chart overview — yash, 07 feb 2002, 12:10 pm, aligarh</div>
+    <div class="grid4">
+      <div class="metric"><div class="metric-label">Lagna (Ascendant)</div><div class="metric-value">Taurus</div><div class="metric-sub">14.6° Rohini</div></div>
+      <div class="metric"><div class="metric-label">Moon sign</div><div class="metric-value">Gemini</div><div class="metric-sub">11.4° Ardra</div></div>
+      <div class="metric"><div class="metric-label">Sun sign</div><div class="metric-value">Capricorn</div><div class="metric-sub">24.6° Dhanishtha</div></div>
+      <div class="metric"><div class="metric-label">Birth nakshatra</div><div class="metric-value">Ardra</div><div class="metric-sub">Pada 2 · Rahu lord</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">planetary placements</div>
+    <div class="card">
+      <div class="planet-row"><span class="planet-name">☉ Sun</span><span class="planet-pos">24.6° Capricorn</span><span>House 9</span><span class="badge badge-info">Dhanishtha P1</span></div>
+      <div class="planet-row"><span class="planet-name">☽ Moon</span><span class="planet-pos">11.4° Gemini</span><span>House 1 (Lagna)</span><span class="badge badge-warn">Ardra P2</span></div>
+      <div class="planet-row"><span class="planet-name">♂ Mars</span><span class="planet-pos">28.9° Pisces</span><span>House 11</span><span class="badge badge-success">Revati P4</span></div>
+      <div class="planet-row"><span class="planet-name">☿ Mercury</span><span class="planet-pos">6.5° Capricorn</span><span>House 9</span><span class="badge badge-info">Uttara Ashadha P3</span></div>
+      <div class="planet-row"><span class="planet-name">♃ Jupiter</span><span class="planet-pos">27.3° Taurus</span><span>House 1 (Lagna)</span><span class="badge badge-success">Mrigashira P2</span></div>
+      <div class="planet-row"><span class="planet-name">♀ Venus</span><span class="planet-pos">20.9° Aquarius</span><span>House 10</span><span class="badge badge-info">Purva Bhadrapada P1</span></div>
+      <div class="planet-row"><span class="planet-name">♄ Saturn</span><span class="planet-pos">7.6° Taurus</span><span>House 1 (Lagna)</span><span class="badge badge-warn">Krittika P4</span></div>
+      <div class="planet-row"><span class="planet-name">☊ Rahu</span><span class="planet-pos">18.2° Taurus</span><span>House 1 (Lagna)</span><span class="badge badge-danger">Rohini P3</span></div>
+      <div class="planet-row"><span class="planet-name">☋ Ketu</span><span class="planet-pos">18.2° Scorpio</span><span>House 7</span><span class="badge badge-danger">Jyeshtha P1</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">key yogas & doshas</div>
+    <div class="card">
+      <div class="yoga-item"><span style="font-weight:500">Budha-Aditya Yoga</span><span class="badge badge-success">Active</span><span style="font-size:12px;color:var(--color-text-secondary)">Sun + Mercury in 9H — brilliance, career success</span></div>
+      <div class="yoga-item"><span style="font-weight:500">Gajakesari Yoga</span><span class="badge badge-success">Active</span><span style="font-size:12px;color:var(--color-text-secondary)">Moon + Jupiter (quadrant) — wisdom, recognition</span></div>
+      <div class="yoga-item"><span style="font-weight:500">Venus in 10H (Aquarius)</span><span class="badge badge-info">Significant</span><span style="font-size:12px;color:var(--color-text-secondary)">Strong career in tech/creative fields</span></div>
+      <div class="yoga-item"><span style="font-weight:500">4-planet Lagna cluster</span><span class="badge badge-warn">Mixed</span><span style="font-size:12px;color:var(--color-text-secondary)">Moon, Jupiter, Saturn, Rahu in 1H — intense personality</span></div>
+      <div class="yoga-item"><span style="font-weight:500">Ketu in 7H</span><span class="badge badge-danger">Dosha</span><span style="font-size:12px;color:var(--color-text-secondary)">Relationship delays, spiritual pull over marriage</span></div>
+      <div class="yoga-item"><span style="font-weight:500">Rahu-1H / Ketu-7H axis</span><span class="badge badge-danger">Dosha</span><span style="font-size:12px;color:var(--color-text-secondary)">Ambition vs relationship tension — karmic axis</span></div>
+      <div class="yoga-item"><span style="font-weight:500">Mars in 11H (Gain house)</span><span class="badge badge-success">Wealth yoga</span><span style="font-size:12px;color:var(--color-text-secondary)">Strong financial gains from network & effort</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">vimshottari dasha timeline</div>
+    <div class="card">
+      <div style="font-size:13px;margin-bottom:12px;">
+        <span style="font-weight:500">Current:</span> <span style="color:var(--color-text-info);font-weight:500">Jupiter Mahadasha</span> · <span style="color:var(--color-text-warning);font-weight:500">Mars Antardasha</span> · Apr 2026 – Apr 2027
+      </div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:16px;">Jupiter MD runs Sep 2013 – Sep 2029 (age 11–27)</div>
+
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;">Antardashas remaining in Jupiter MD:</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;">
+          <span style="min-width:110px;font-weight:500">Jup–Mars (now)</span>
+          <div style="flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;">
+            <div style="width:15%;height:100%;background:#E24B4A;border-radius:3px;"></div>
+          </div>
+          <span style="color:var(--color-text-secondary)">Apr 26–Apr 27</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;">
+          <span style="min-width:110px">Jup–Rahu</span>
+          <div style="flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;">
+            <div style="width:28%;height:100%;background:#378ADD;border-radius:3px;"></div>
+          </div>
+          <span style="color:var(--color-text-secondary)">Apr 27–Aug 29</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;">
+          <span style="min-width:110px">Saturn MD</span>
+          <div style="flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden;">
+            <div style="width:100%;height:100%;background:#888780;border-radius:3px;"></div>
+          </div>
+          <span style="color:var(--color-text-secondary)">Sep 29–Sep 48</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5-year career & life forecast</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="background:var(--color-background-secondary);">
+            <th style="padding:10px 12px;text-align:left;font-weight:500;border:0.5px solid var(--color-border-tertiary);">Year / Age</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:500;border:0.5px solid var(--color-border-tertiary);">Career</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:500;border:0.5px solid var(--color-border-tertiary);">Money</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:500;border:0.5px solid var(--color-border-tertiary);">Relationships</th>
+            <th style="padding:10px 12px;text-align:left;font-weight:500;border:0.5px solid var(--color-border-tertiary);">Health</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--color-background-success);">
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);font-weight:500;">2026 (Age 24)<br><span class="badge badge-success">Best year</span></td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">First strong job offer; Mars-Jup gives drive + luck. Tech/IT breakthrough likely</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Income begins; moderate but stable. Mars boosts earning courage</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">New connections form; social circle expands. No serious romance yet</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Good energy; watch for stress headaches (Rahu in Lagna)</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);font-weight:500;">2027 (Age 25)</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Jup-Rahu begins Apr 2027 — ambition spikes. Job switch or promotion window</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Income rises. Rahu can bring sudden opportunities + risky temptations</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Unexpected attraction possible. Ketu-7H caution — don't rush commitment</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Generally fine; manage anxiety around transitions</td>
+          </tr>
+          <tr style="background:var(--color-background-secondary);">
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);font-weight:500;">2028 (Age 26)</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Continued Jup-Rahu — foreign company, startup, or overseas project possible</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Best earnings yet; consider first investments (mutual funds/SIP)</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Family marriage pressure may begin. Enjoy freedom while it lasts</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Stable; regular exercise important with desk job</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);font-weight:500;">2029 (Age 27)<br><span class="badge badge-warn">Transition year</span></td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Jup-Rahu ends Aug 2029; Saturn MD starts Sep 2029 — restructuring phase</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Possibly plateau after growth. Saturn demands discipline, not shortcuts</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Serious relationship or marriage begins to crystallize</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Saturn MD start may bring fatigue, joint/back concerns — rest & exercise</td>
+          </tr>
+          <tr style="background:var(--color-background-danger);">
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);font-weight:500;">2030 (Age 28)<br><span class="badge badge-danger">Toughest year</span></td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Saturn-Saturn antardasha — heavy discipline, career re-evaluation, possible setbacks</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Expenses may rise; avoid debt. Build savings buffer in 2027-28</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Relationship tests or delays. Requires maturity & patience</td>
+            <td style="padding:10px 12px;border:0.5px solid var(--color-border-tertiary);">Stress-related issues possible. Sleep, diet, and mental health are priority</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">functional benefics & malefics for taurus lagna</div>
+    <div class="grid2">
+      <div class="card">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-success);margin-bottom:8px;">Functional Benefics</div>
+        <div class="planet-row"><span class="planet-name">Saturn</span><span style="font-size:12px;color:var(--color-text-secondary)">Yogakaraka (9H + 10H lord) — top benefic</span></div>
+        <div class="planet-row"><span class="planet-name">Venus</span><span style="font-size:12px;color:var(--color-text-secondary)">Lagna lord — very favorable</span></div>
+        <div class="planet-row"><span class="planet-name">Mercury</span><span style="font-size:12px;color:var(--color-text-secondary)">2H + 5H lord — wealth & intellect</span></div>
+        <div class="planet-row"><span class="planet-name">Sun</span><span style="font-size:12px;color:var(--color-text-secondary)">4H lord — moderate benefic</span></div>
+      </div>
+      <div class="card">
+        <div style="font-size:12px;font-weight:500;color:var(--color-text-danger);margin-bottom:8px;">Functional Malefics</div>
+        <div class="planet-row"><span class="planet-name">Jupiter</span><span style="font-size:12px;color:var(--color-text-secondary)">8H + 11H lord — can mislead</span></div>
+        <div class="planet-row"><span class="planet-name">Mars</span><span style="font-size:12px;color:var(--color-text-secondary)">7H + 12H lord — maraka energy</span></div>
+        <div class="planet-row"><span class="planet-name">Moon</span><span style="font-size:12px;color:var(--color-text-secondary)">3H lord — mildly malefic</span></div>
+        <div class="planet-row"><span class="planet-name">Rahu/Ketu</span><span style="font-size:12px;color:var(--color-text-secondary)">Shadow planets — unpredictable</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
