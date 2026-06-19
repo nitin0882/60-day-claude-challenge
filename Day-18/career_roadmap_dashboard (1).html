@@ -1,0 +1,196 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.dash{padding:1rem 0}
+.page-title{font-size:22px;font-weight:500;margin-bottom:4px}
+.page-sub{font-size:14px;color:var(--color-text-secondary);margin-bottom:1.5rem}
+.section{margin-bottom:1.5rem}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:.75rem;padding-bottom:6px;border-bottom:.5px solid var(--color-border-tertiary)}
+.section-title{font-size:16px;font-weight:500}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:var(--border-radius-md);font-weight:500}
+.b-high{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-med{background:#FAEEDA;color:#854F0B}
+.b-low{background:var(--color-background-success);color:var(--color-text-success)}
+.b-gap{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-have{background:var(--color-background-success);color:var(--color-text-success)}
+.b-partial{background:#FAEEDA;color:#854F0B}
+.b-pending{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-open{background:var(--color-background-info);color:var(--color-text-info)}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.metric-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center}
+.metric-label{font-size:13px;color:var(--color-text-secondary);margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:500}
+.action-table{width:100%;font-size:13px;border-collapse:collapse}
+.action-table th{text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary);padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary)}
+.action-table td{padding:8px;border-bottom:.5px solid var(--color-border-tertiary);vertical-align:top}
+.action-table tr:last-child td{border-bottom:none}
+.action-table tr:hover td{background:var(--color-background-secondary)}
+.skill-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px}
+.skill-row:last-child{border-bottom:none}
+.week-row{display:flex;gap:12px;padding:8px 0;border-bottom:.5px solid var(--color-border-tertiary);font-size:13px;align-items:flex-start}
+.week-row:last-child{border-bottom:none}
+.week-label{font-weight:500;min-width:72px;color:var(--color-text-secondary);font-size:12px}
+.proj-table{width:100%;font-size:13px;border-collapse:collapse}
+.proj-table th{text-align:left;font-weight:500;font-size:12px;color:var(--color-text-secondary);padding:6px 8px;border-bottom:.5px solid var(--color-border-tertiary)}
+.proj-table td{padding:8px;border-bottom:.5px solid var(--color-border-tertiary)}
+.proj-table tr:last-child td{border-bottom:none}
+.month-card{flex:1;min-width:180px;background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem}
+.month-title{font-size:14px;font-weight:500;margin-bottom:.5rem}
+.month-item{font-size:12px;color:var(--color-text-secondary);margin-bottom:4px;display:flex;align-items:flex-start;gap:6px}
+.collapsible-toggle{cursor:pointer;font-size:13px;color:var(--color-text-info);background:none;border:none;padding:0;margin-top:6px}
+.collapsible-toggle:hover{text-decoration:underline}
+.col-body{overflow:hidden;transition:max-height .3s ease}
+.q-item{font-size:13px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);margin-bottom:6px;display:flex;gap:8px;align-items:flex-start}
+.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+</style>
+<h2 class="sr-only">AI Career Roadmap Dashboard — Student to Python/Data Job in 3 Months</h2>
+<div class="dash">
+  <p class="page-title">AI Career Roadmap</p>
+  <p class="page-sub">Profile: Student &nbsp;·&nbsp; Target: Data / Python Developer Job or Internship &nbsp;·&nbsp; Timeline: 3 Months &nbsp;·&nbsp; Strategy: Personalised · Chain-of-Thought Analysis · 3-Month Sprint</p>
+
+  <div class="card-grid" style="margin-bottom:1.5rem">
+    <div class="metric-card"><p class="metric-label">Timeline</p><p class="metric-val">3 months</p></div>
+    <div class="metric-card"><p class="metric-label">Skills to build</p><p class="metric-val">4 gaps</p></div>
+    <div class="metric-card"><p class="metric-label">Projects planned</p><p class="metric-val">4</p></div>
+    <div class="metric-card"><p class="metric-label">Month 3 goal</p><p class="metric-val">Offer</p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-file-text" aria-hidden="true"></i><span class="section-title">Summary</span></div>
+    <div class="card">
+      <p style="font-size:14px;line-height:1.7;color:var(--color-text-secondary)">A personalised 3-month sprint plan for a student aiming to land a Data / Python Developer job or internship. The plan covers a skill gap analysis, a week-by-week learning schedule, four portfolio projects to build and publish on GitHub, a networking strategy, and five immediate next actions to take today. The document was generated using chain-of-thought reasoning by an AI Career Strategist and is marked Confidential &amp; Personalised.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-star" aria-hidden="true"></i><span class="section-title">Key takeaways</span></div>
+    <div class="two-col">
+      <div class="card"><p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px">STRENGTHS ALREADY IN PLACE</p>
+        <div class="skill-row"><span>Python basics</span><span class="badge b-have">✅ Have</span></div>
+        <div class="skill-row"><span>Data analysis (Pandas)</span><span class="badge b-have">✅ Have</span></div>
+        <div class="skill-row"><span>Data viz (Matplotlib)</span><span class="badge b-partial">■ Partial</span></div>
+        <div class="skill-row"><span>SQL</span><span class="badge b-partial">■ Partial</span></div>
+      </div>
+      <div class="card"><p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px">GAPS TO CLOSE</p>
+        <div class="skill-row"><span>Statistics / Probability</span><span class="badge b-gap">✗ Gap</span></div>
+        <div class="skill-row"><span>Machine learning</span><span class="badge b-gap">✗ Gap</span></div>
+        <div class="skill-row"><span>Git &amp; GitHub</span><span class="badge b-gap">✗ Gap</span></div>
+        <div class="skill-row"><span>Resume / Portfolio</span><span class="badge b-gap">✗ Gap</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-checklist" aria-hidden="true"></i><span class="section-title">Action items — do these today</span></div>
+    <div class="card">
+      <table class="action-table">
+        <thead><tr><th>#</th><th>Task</th><th>Owner</th><th>Deadline</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Create / update GitHub profile — add professional bio &amp; photo</td><td>Student</td><td>Today</td><td><span class="badge b-high">🔴 High Priority</span></td></tr>
+          <tr><td>2</td><td>Start SQL course on Mode Analytics or SQLZoo — commit 1 hour/day</td><td>Student</td><td>Today</td><td><span class="badge b-high">🔴 High Priority</span></td></tr>
+          <tr><td>3</td><td>Enrol in Kaggle's free Python &amp; Pandas courses</td><td>Student</td><td>Today</td><td><span class="badge b-high">🔴 High Priority</span></td></tr>
+          <tr><td>4</td><td>Set LinkedIn to 'Open to Work' with keywords: Data Analyst, Python, SQL</td><td>Student</td><td>Today</td><td><span class="badge b-high">🔴 High Priority</span></td></tr>
+          <tr><td>5</td><td>Bookmark 10 target companies and follow their LinkedIn pages</td><td>Student</td><td>Today</td><td><span class="badge b-med">🟠 Medium Priority</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-calendar" aria-hidden="true"></i><span class="section-title">Week-by-week learning plan</span></div>
+    <div class="card">
+      <div class="week-row"><span class="week-label">Week 1–2</span><span><strong style="font-weight:500">SQL fundamentals</strong> — Mode Analytics / SQLZoo</span></div>
+      <div class="week-row"><span class="week-label">Week 3–4</span><span><strong style="font-weight:500">Statistics &amp; probability</strong> — Khan Academy + StatQuest</span></div>
+      <div class="week-row"><span class="week-label">Week 5–6</span><span><strong style="font-weight:500">Pandas deep dive</strong> — Kaggle Python Course</span></div>
+      <div class="week-row"><span class="week-label">Week 7–8</span><span><strong style="font-weight:500">Scikit-Learn ML basics</strong> — fast.ai / Coursera</span></div>
+      <div class="week-row"><span class="week-label">Week 9–10</span><span><strong style="font-weight:500">Git, GitHub &amp; portfolio</strong> — GitHub Docs + freeCodeCamp</span></div>
+      <div class="week-row"><span class="week-label">Week 11–12</span><span><strong style="font-weight:500">Data viz + interview prep</strong> — Matplotlib + LeetCode Easy</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-code" aria-hidden="true"></i><span class="section-title">Suggested projects — build in public on GitHub</span></div>
+    <div class="card">
+      <table class="proj-table">
+        <thead><tr><th>#</th><th>Project name</th><th>Tech stack</th><th>Key skill</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>COVID-19 Data Explorer</td><td>Pandas + Matplotlib + Seaborn</td><td>EDA, storytelling</td></tr>
+          <tr><td>2</td><td>Movie Recommender System</td><td>Scikit-Learn + Python</td><td>ML, collaborative filtering</td></tr>
+          <tr><td>3</td><td>SQL Sales Dashboard</td><td>SQLite + Python + Plotly</td><td>SQL, dashboarding</td></tr>
+          <tr><td>4</td><td>End-to-End ML Pipeline</td><td>Scikit-Learn + GitHub Actions</td><td>MLOps, deployment</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-users" aria-hidden="true"></i><span class="section-title">Networking strategy &amp; monthly milestones</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      <div class="month-card" style="border-top:2px solid #1D9E75">
+        <p class="month-title">Month 1</p>
+        <div class="month-item"><span>■</span><span>Optimise LinkedIn: headline = 'Aspiring Data Analyst | Python | SQL'</span></div>
+        <div class="month-item"><span>■</span><span>Post 1x/week: share project progress, learnings, dataset insights</span></div>
+        <div class="month-item"><span>■</span><span>Engage in 3 data communities: Kaggle, DataTalks.Club, Reddit r/datascience</span></div>
+        <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-top:.75rem;margin-bottom:4px">CHECKPOINTS</p>
+        <div class="month-item"><span>✓</span><span>Complete SQL + Stats courses</span></div>
+        <div class="month-item"><span>✓</span><span>Build Project 1 &amp; push to GitHub</span></div>
+        <div class="month-item"><span>✓</span><span>LinkedIn profile live &amp; optimised</span></div>
+      </div>
+      <div class="month-card" style="border-top:2px solid #378ADD">
+        <p class="month-title">Month 2</p>
+        <div class="month-item"><span>■</span><span>Cold DM 5 data professionals/week — ask for 15-min coffee chats</span></div>
+        <div class="month-item"><span>■</span><span>Apply to 5 targeted roles/week (internships + entry-level DA/DE/DS)</span></div>
+        <div class="month-item"><span>■</span><span>Contribute to 1 open-source project by Month 2 (Pandas / Scikit-Learn)</span></div>
+        <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-top:.75rem;margin-bottom:4px">CHECKPOINTS</p>
+        <div class="month-item"><span>✓</span><span>Build Projects 2 &amp; 3</span></div>
+        <div class="month-item"><span>✓</span><span>10+ GitHub contributions</span></div>
+        <div class="month-item"><span>✓</span><span>Apply to 20+ roles</span></div>
+      </div>
+      <div class="month-card" style="border-top:2px solid #D4537E">
+        <p class="month-title">Month 3</p>
+        <div class="month-item"><span>■</span><span>Not specified</span></div>
+        <p style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-top:.75rem;margin-bottom:4px">CHECKPOINTS</p>
+        <div class="month-item"><span>✓</span><span>Build Project 4 + portfolio site</span></div>
+        <div class="month-item"><span>✓</span><span>5+ interviews scheduled</span></div>
+        <div class="month-item"><span>✓</span><span>Offer / internship acceptance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-help-circle" aria-hidden="true"></i><span class="section-title">Open questions</span></div>
+    <div class="q-item"><span class="badge b-open" style="white-space:nowrap">❓ Open</span><span style="font-size:13px">Which specific companies are on the bookmark list of 10 target companies? (not specified)</span></div>
+    <div class="q-item"><span class="badge b-open" style="white-space:nowrap">❓ Open</span><span style="font-size:13px">How many hours per day/week is the student committing beyond the 1 hour/day for SQL? (not specified)</span></div>
+    <div class="q-item"><span class="badge b-open" style="white-space:nowrap">❓ Open</span><span style="font-size:13px">Which open-source project (Pandas or Scikit-Learn) will the student contribute to in Month 2? (not specified)</span></div>
+    <div class="q-item"><span class="badge b-open" style="white-space:nowrap">❓ Open</span><span style="font-size:13px">What is the target geographic market / job location? (not specified)</span></div>
+    <div class="q-item"><span class="badge b-open" style="white-space:nowrap">❓ Open</span><span style="font-size:13px">Networking strategy for Month 3 was not specified</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-alert-triangle" aria-hidden="true"></i><span class="section-title">Risks / blockers</span></div>
+    <div class="two-col">
+      <div class="q-item" style="background:var(--color-background-danger)"><span class="badge b-high" style="white-space:nowrap">🔴 Risk</span><span style="font-size:13px">Statistics / Probability is a full gap — must be closed in just Weeks 3–4 before ML topics begin</span></div>
+      <div class="q-item" style="background:var(--color-background-danger)"><span class="badge b-high" style="white-space:nowrap">🔴 Risk</span><span style="font-size:13px">Git &amp; GitHub gap — pushed to Weeks 9–10, yet GitHub is required for projects from Week 1</span></div>
+      <div class="q-item" style="background:#FAEEDA"><span class="badge b-med" style="white-space:nowrap">🟠 Blocker</span><span style="font-size:13px">Portfolio site build required by Month 3 but no platform or tech stack is specified</span></div>
+      <div class="q-item" style="background:#FAEEDA"><span class="badge b-med" style="white-space:nowrap">🟠 Risk</span><span style="font-size:13px">Applying to 5 roles/week in Month 2 requires a resume — Resume/Portfolio is a current gap</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-alert-circle" aria-hidden="true"></i><span class="section-title">Conflicts</span></div>
+    <div class="q-item"><span class="badge" style="background:var(--color-background-warning);color:var(--color-text-warning);white-space:nowrap">⚠️ Conflict</span><span style="font-size:13px"><strong style="font-weight:500">GitHub push vs. Git gap:</strong> Projects 1–3 instruct the student to "push to GitHub" starting Month 1, but Git &amp; GitHub is listed as a gap not addressed until Weeks 9–10.</span></div>
+    <div class="q-item" style="margin-top:6px"><span class="badge" style="background:var(--color-background-warning);color:var(--color-text-warning);white-space:nowrap">⚠️ Conflict</span><span style="font-size:13px"><strong style="font-weight:500">Resume gap vs. job applications:</strong> The plan calls for applying to 5 roles/week in Month 2, while Resume / Portfolio is currently listed as a gap with no scheduled closure date in the learning plan.</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><i class="ti ti-notes" aria-hidden="true"></i><span class="section-title">Additional notes</span></div>
+    <div class="card">
+      <p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:8px">Document metadata</p>
+      <div class="skill-row"><span style="font-size:13px">Generated by</span><span style="font-size:13px;color:var(--color-text-secondary)">Chain-of-Thought Reasoning · AI Career Strategist</span></div>
+      <div class="skill-row"><span style="font-size:13px">Classification</span><span style="font-size:13px;color:var(--color-text-secondary)">Confidential &amp; Personalised</span></div>
+      <div class="skill-row"><span style="font-size:13px">Created</span><span style="font-size:13px;color:var(--color-text-secondary)">Fri Jun 5 2026</span></div>
+      <div class="skill-row" style="border-bottom:none"><span style="font-size:13px">LinkedIn headline suggestion</span><span style="font-size:13px;color:var(--color-text-secondary)">'Aspiring Data Analyst | Python | SQL'</span></div>
+    </div>
+  </div>
+</div>
