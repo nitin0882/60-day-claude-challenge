@@ -1,0 +1,83 @@
+
+<style>
+  .hub-wrap { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .hub-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.5rem; }
+  .hub-badge { width: 48px; height: 48px; border-radius: 50%; background: #185FA5; display: flex; align-items: center; justify-content: center; }
+  .hub-badge i { font-size: 24px; color: #E6F1FB; }
+  .hub-title { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin: 0; }
+  .hub-sub { font-size: 14px; color: var(--color-text-secondary); margin: 0; }
+  .stage-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .pill { font-size: 12px; padding: 4px 12px; border-radius: 99px; border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); background: var(--color-background-secondary); }
+  .pill.active { background: #E6F1FB; color: #0C447C; border-color: #85B7EB; font-weight: 500; }
+  .q-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .q-label { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 0.75rem; }
+  .q-text { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1.25rem; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); cursor: pointer; font-size: 14px; color: var(--color-text-primary); text-align: left; transition: background 0.15s; }
+  .opt-btn:hover { background: #E6F1FB; border-color: #85B7EB; color: #0C447C; }
+  .opt-btn.selected { background: #E6F1FB; border-color: #378ADD; color: #0C447C; font-weight: 500; }
+  .opt-icon { font-size: 18px; color: var(--color-text-secondary); }
+  .opt-btn:hover .opt-icon, .opt-btn.selected .opt-icon { color: #185FA5; }
+  .note { font-size: 13px; color: var(--color-text-secondary); margin-top: 1rem; padding: 10px 14px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); border-left: 3px solid #85B7EB; }
+</style>
+<div class="hub-wrap">
+  <h2 class="sr-only">Football Intelligence Hub — Stage 0: Knowledge Check</h2>
+  <div class="hub-header">
+    <div class="hub-badge"><i class="ti ti-ball-football" aria-hidden="true"></i></div>
+    <div>
+      <p class="hub-title">Football Intelligence Hub</p>
+      <p class="hub-sub">World Cup 2026 · Football IQ · Messi vs Ronaldo Personality</p>
+    </div>
+  </div>
+  <div class="stage-pills">
+    <span class="pill active">Stage 0 — Knowledge check</span>
+    <span class="pill">Stage 1 — WC 2026 predictions</span>
+    <span class="pill">Stage 2 — Football IQ quiz</span>
+    <span class="pill">Stage 3 — Messi vs Ronaldo match</span>
+    <span class="pill">Final — Your profile</span>
+  </div>
+  <div class="q-card">
+    <p class="q-label">Before we kick off — let's calibrate your experience</p>
+    <p class="q-text">How familiar are you with football?</p>
+    <div class="options">
+      <button class="opt-btn" onclick="pick(this, 'beginner')">
+        <i class="ti ti-seedling opt-icon" aria-hidden="true"></i>
+        I know almost nothing — first time exploring the sport
+      </button>
+      <button class="opt-btn" onclick="pick(this, 'casual')">
+        <i class="ti ti-eye opt-icon" aria-hidden="true"></i>
+        I watch occasionally — I know the basics (goals, offside, red cards)
+      </button>
+      <button class="opt-btn" onclick="pick(this, 'follower')">
+        <i class="ti ti-star opt-icon" aria-hidden="true"></i>
+        I follow a club or league and watch most big games
+      </button>
+      <button class="opt-btn" onclick="pick(this, 'enthusiast')">
+        <i class="ti ti-trophy opt-icon" aria-hidden="true"></i>
+        I follow multiple leagues, know tactics, and track transfer news
+      </button>
+      <button class="opt-btn" onclick="pick(this, 'expert')">
+        <i class="ti ti-antenna-bars-5 opt-icon" aria-hidden="true"></i>
+        I actively follow football and major tournaments — stats, history, everything
+      </button>
+    </div>
+    <p class="note" id="note" style="display:none;"></p>
+  </div>
+</div>
+<script>
+function pick(el, level) {
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  const msgs = {
+    beginner: "Perfect! I'll keep things simple and explain everything from scratch. Welcome to the beautiful game! ⚽",
+    casual: "Great — I'll explain key concepts without overloading you, and use familiar examples.",
+    follower: "Nice — you'll get solid analysis and some deeper context. Let's see how much you know!",
+    enthusiast: "Excellent — I'll go into tactics, form, stats, and rivalries. Ready to go deep?",
+    expert: "Challenge accepted! Expect detailed analysis, historical patterns, and advanced breakdowns."
+  };
+  const note = document.getElementById('note');
+  note.textContent = msgs[level];
+  note.style.display = 'block';
+  setTimeout(() => sendPrompt('My football knowledge level is: ' + el.textContent.trim()), 800);
+}
+</script>
