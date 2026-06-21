@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>FacePuzzle</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #16161a;
+    --surface2: #1e1e24;
+    --surface3: #26262e;
+    --border: #2e2e38;
+    --accent: #7c6af7;
+    --accent2: #a89af9;
+    --accent-glow: rgba(124,106,247,0.18);
+    --green: #3ddc84;
+    --green-glow: rgba(61,220,132,0.18);
+    --red: #f75a5a;
+    --text: #e8e8f0;
+    --text2: #8888a0;
+    --text3: #55556a;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%; height: 100%; min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0 0 40px;
+  }
+
+  /* ── Header ── */
+  header {
+    width: 100%;
+    padding: 18px 24px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(13,13,15,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  /* ── Screens ── */
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 640px;
+    padding: 32px 20px 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .screen.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Section headings ── */
+  .screen-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .screen-title span { color: var(--accent2); }
+
+  .screen-sub {
+    font-size: 0.875rem;
+    color: var(--text2);
+    text-align: center;
+    line-height: 1.6;
+    max-width: 380px;
+  }
+
+  /* ── Camera screen ── */
+  .camera-container {
+    width: 100%;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .camera-container::before {
+    content: '';
+    display: block;
+    padding-top: 75%;
+  }
+
+  #video {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+  }
+
+  .camera-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    flex-direction: column;
+    gap: 12px;
+    transition: opacity 0.3s;
+  }
+
+  .camera-overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .camera-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--surface3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .camera-guide {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .camera-guide.visible { opacity: 1; }
+
+  .face-oval {
+    width: 54%;
+    aspect-ratio: 3/4;
+    border: 2px dashed rgba(124,106,247,0.5);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2000px rgba(0,0,0,0.25);
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(124,106,247,0.4); }
+    50%       { border-color: rgba(124,106,247,0.85); }
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+
+  .btn-primary:hover {
+    background: var(--accent2);
+    box-shadow: 0 0 24px 4px var(--accent-glow);
+  }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-secondary:hover { background: var(--surface3); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover { color: var(--text); border-color: var(--text3); }
+
+  .btn-full { width: 100%; }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .btn-row .btn { flex: 1; min-width: 120px; }
+
+  /* ── Camera permission error ── */
+  .error-card {
+    width: 100%;
+    padding: 20px;
+    background: rgba(247,90,90,0.08);
+    border: 1px solid rgba(247,90,90,0.28);
+    border-radius: var(--radius);
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .error-card.visible { display: flex; }
+
+  .error-title {
+    font-weight: 600;
+    color: var(--red);
+    font-size: 0.9375rem;
+  }
+
+  .error-body {
+    font-size: 0.8125rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  /* ── Difficulty picker ── */
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+  }
+
+  .diff-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .diff-card:hover {
+    border-color: var(--accent);
+    background: var(--surface2);
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+
+  .diff-card.selected {
+    border-color: var(--accent);
+    background: var(--surface2);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  .diff-preview {
+    display: grid;
+    gap: 2px;
+  }
+
+  .diff-cell {
+    background: var(--surface3);
+    border-radius: 2px;
+    width: 10px; height: 10px;
+  }
+
+  .diff-card.selected .diff-cell { background: var(--accent2); }
+
+  .diff-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .diff-meta {
+    font-size: 0.75rem;
+    color: var(--text2);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── Puzzle screen ── */
+  #screen-puzzle {
+    max-width: 780px;
+    padding: 24px 16px 0;
+  }
+
+  .puzzle-layout {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .stat-label {
+    font-size: 0.6875rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .stat-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .stat-value.accent { color: var(--accent2); }
+
+  /* ── Puzzle board ── */
+  .puzzle-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #puzzle-board {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .puzzle-piece {
+    position: absolute;
+    cursor: grab;
+    border-radius: 3px;
+    overflow: hidden;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+    will-change: left, top;
+  }
+
+  .puzzle-piece:active { cursor: grabbing; }
+
+  .puzzle-piece canvas {
+    display: block;
+    width: 100%; height: 100%;
+  }
+
+  .puzzle-piece.dragging {
+    cursor: grabbing;
+    z-index: 1000;
+    box-shadow: 0 0 0 2.5px var(--accent), 0 12px 40px rgba(0,0,0,0.6);
+    transform: scale(1.05);
+    transition: box-shadow 0.15s ease;
+  }
+
+  .puzzle-piece.correct {
+    box-shadow: 0 0 0 2.5px var(--green), 0 0 14px var(--green-glow);
+  }
+
+  .puzzle-piece.correct.dragging {
+    box-shadow: 0 0 0 2.5px var(--accent), 0 12px 40px rgba(0,0,0,0.6);
+  }
+
+  /* ── Sidebar (preview + controls) ── */
+  .sidebar {
+    width: 160px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .preview-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .preview-label {
+    font-size: 0.6875rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    padding: 8px 10px 4px;
+  }
+
+  #preview-canvas {
+    width: 100%;
+    display: block;
+  }
+
+  .sidebar-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sidebar-btns .btn {
+    padding: 10px 14px;
+    font-size: 0.8125rem;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar-wrap {
+    width: 100%;
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* ── Win overlay ── */
+  #win-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.88);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(6px);
+    animation: fadeIn 0.3s ease;
+  }
+
+  #win-overlay.active { display: flex; }
+
+  .win-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(40px) scale(0.96); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .win-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--green), var(--accent2));
+  }
+
+  .win-emoji {
+    font-size: 3.5rem;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .win-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: -0.03em;
+  }
+
+  .win-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .win-stat {
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 14px 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .win-stat-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  .win-stat-label {
+    font-size: 0.6875rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Leaderboard ── */
+  .lb-title {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .lb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .lb-row {
+    display: grid;
+    grid-template-columns: 20px 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.8125rem;
+  }
+
+  .lb-rank {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text3);
+    font-weight: 700;
+  }
+
+  .lb-rank.gold   { color: #f5c842; }
+  .lb-rank.silver { color: #b0b8c8; }
+  .lb-rank.bronze { color: #c97b43; }
+
+  .lb-info { display: flex; flex-direction: column; gap: 1px; }
+
+  .lb-date {
+    font-size: 0.6875rem;
+    color: var(--text3);
+  }
+
+  .lb-diff {
+    font-size: 0.6875rem;
+    background: var(--surface3);
+    color: var(--text2);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .lb-time {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    color: var(--text);
+    font-size: 0.875rem;
+  }
+
+  .lb-moves {
+    font-size: 0.75rem;
+    color: var(--text2);
+    text-align: right;
+  }
+
+  .lb-empty {
+    text-align: center;
+    color: var(--text3);
+    font-size: 0.8125rem;
+    padding: 16px;
+  }
+
+  /* ── Hidden ── */
+  .hidden { display: none !important; }
+
+  /* ── Confetti canvas ── */
+  #confetti-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 499;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .puzzle-layout { flex-direction: column-reverse; }
+    .sidebar {
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .preview-card { width: 120px; }
+    .sidebar-btns { flex: 1; flex-direction: row; flex-wrap: wrap; }
+    .sidebar-btns .btn { flex: 1; }
+    .stats-bar { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 400px) {
+    header { padding: 14px 16px; }
+    .screen-title { font-size: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    FacePuzzle
+  </div>
+  <div id="header-diff" style="font-size:0.8125rem;color:var(--text3);font-family:'Space Mono',monospace;"></div>
+</header>
+
+<!-- ════════════════════════════════════════════════
+     SCREEN 1 — CAMERA
+════════════════════════════════════════════════ -->
+<div id="screen-camera" class="screen active">
+  <div>
+    <h1 class="screen-title">Position your <span>face</span> in the frame</h1>
+  </div>
+  <p class="screen-sub">Your camera stays private — the photo is only used locally in your browser and never uploaded anywhere.</p>
+
+  <div class="camera-container" id="camera-container">
+    <video id="video" autoplay playsinline muted></video>
+    <div class="camera-overlay" id="camera-overlay">
+      <div class="camera-icon">📷</div>
+      <div style="font-size:0.875rem;color:var(--text2)">Requesting camera…</div>
+    </div>
+    <div class="camera-guide" id="camera-guide">
+      <div class="face-oval"></div>
+    </div>
+  </div>
+
+  <div class="error-card" id="camera-error">
+    <div class="error-title">Camera access denied</div>
+    <div class="error-body">To play FacePuzzle, your browser needs camera permission. Click the camera icon in your address bar, allow access, then reload the page.</div>
+  </div>
+
+  <button class="btn btn-primary btn-full" id="btn-snap" disabled>
+    <span>📸</span> Take Photo
+  </button>
+
+  <canvas id="snap-canvas" style="display:none"></canvas>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     SCREEN 2 — DIFFICULTY
+════════════════════════════════════════════════ -->
+<div id="screen-difficulty" class="screen">
+  <h1 class="screen-title">Choose <span>difficulty</span></h1>
+  <p class="screen-sub">More pieces = more challenge. Pick what suits you.</p>
+
+  <div class="diff-grid">
+    <div class="diff-card" data-grid="3">
+      <div class="diff-preview" style="grid-template-columns:repeat(3,10px)">
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+      </div>
+      <div class="diff-label">Easy</div>
+      <div class="diff-meta">3 × 3 · 9 pieces</div>
+    </div>
+    <div class="diff-card selected" data-grid="4">
+      <div class="diff-preview" style="grid-template-columns:repeat(4,10px)">
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+      </div>
+      <div class="diff-label">Medium</div>
+      <div class="diff-meta">4 × 4 · 16 pieces</div>
+    </div>
+    <div class="diff-card" data-grid="5">
+      <div class="diff-preview" style="grid-template-columns:repeat(5,10px)">
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+        <div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div><div class="diff-cell"></div>
+      </div>
+      <div class="diff-label">Hard</div>
+      <div class="diff-meta">5 × 5 · 25 pieces</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-ghost" id="btn-retake-diff">↩ Retake Photo</button>
+    <button class="btn btn-primary" id="btn-start-puzzle" style="flex:2">Start Puzzle →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     SCREEN 3 — PUZZLE
+════════════════════════════════════════════════ -->
+<div id="screen-puzzle" class="screen">
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-label">Time</div>
+      <div class="stat-value accent" id="stat-time">00:00.0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Moves</div>
+      <div class="stat-value" id="stat-moves">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Correct</div>
+      <div class="stat-value" id="stat-correct">0 / 0</div>
+    </div>
+  </div>
+
+  <div class="progress-bar-wrap" style="width:100%">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="puzzle-layout">
+    <div class="puzzle-wrap">
+      <div id="puzzle-board"></div>
+    </div>
+    <div class="sidebar">
+      <div class="preview-card">
+        <div class="preview-label">Reference</div>
+        <canvas id="preview-canvas"></canvas>
+      </div>
+      <div class="sidebar-btns">
+        <button class="btn btn-secondary" id="btn-new-photo-puzzle">📷 New Photo</button>
+        <button class="btn btn-secondary" id="btn-play-again-puzzle">🔀 Shuffle</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     WIN OVERLAY
+════════════════════════════════════════════════ -->
+<div id="win-overlay">
+  <div class="win-card">
+    <div class="win-emoji" id="win-emoji">🎉</div>
+    <div class="win-title">Puzzle solved!</div>
+    <div class="win-stats">
+      <div class="win-stat">
+        <div class="win-stat-val" id="win-time">—</div>
+        <div class="win-stat-label">Time</div>
+      </div>
+      <div class="win-stat">
+        <div class="win-stat-val" id="win-moves">—</div>
+        <div class="win-stat-label">Moves</div>
+      </div>
+      <div class="win-stat">
+        <div class="win-stat-val" id="win-diff">—</div>
+        <div class="win-stat-label">Grid</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="lb-title" style="margin-bottom:10px">🏆 Best Times</div>
+      <div class="lb-list" id="lb-list"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btn-new-photo-win">📷 New Photo</button>
+      <button class="btn btn-primary" id="btn-play-again-win">Play Again</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+(() => {
+'use strict';
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+const state = {
+  stream: null,
+  photoDataUrl: null,
+  gridSize: 4,
+  pieces: [],       // { id, correctIdx, currentIdx, el, pieceCanvas }
+  boardSize: 0,
+  pieceSize: 0,
+  moves: 0,
+  correctCount: 0,
+  timerInterval: null,
+  startTime: null,
+  elapsed: 0,
+  won: false,
+};
+
+// ══════════════════════════════════════════════
+// DOM
+// ══════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+
+const screens = {
+  camera:     $('screen-camera'),
+  difficulty: $('screen-difficulty'),
+  puzzle:     $('screen-puzzle'),
+};
+
+function showScreen(name) {
+  Object.values(screens).forEach(s => s.classList.remove('active'));
+  screens[name].classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+// CAMERA
+// ══════════════════════════════════════════════
+const video        = $('video');
+const cameraOverlay = $('camera-overlay');
+const cameraGuide  = $('camera-guide');
+const cameraError  = $('camera-error');
+const btnSnap      = $('btn-snap');
+const snapCanvas   = $('snap-canvas');
+
+async function startCamera() {
+  try {
+    const constraints = {
+      video: {
+        facingMode: 'user',
+        width: { ideal: 1280 },
+        height: { ideal: 960 },
+      },
+    };
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    state.stream = stream;
+    video.srcObject = stream;
+    video.onloadedmetadata = () => {
+      cameraOverlay.classList.add('hidden');
+      cameraGuide.classList.add('visible');
+      btnSnap.disabled = false;
+    };
+  } catch (err) {
+    cameraOverlay.classList.add('hidden');
+    cameraError.classList.add('visible');
+    console.warn('Camera error:', err);
+  }
+}
+
+function stopCamera() {
+  if (state.stream) {
+    state.stream.getTracks().forEach(t => t.stop());
+    state.stream = null;
+  }
+}
+
+btnSnap.addEventListener('click', () => {
+  const vw = video.videoWidth  || 640;
+  const vh = video.videoHeight || 480;
+  const size = Math.min(vw, vh);
+  const ox = Math.floor((vw - size) / 2);
+  const oy = Math.floor((vh - size) / 2);
+
+  snapCanvas.width  = size;
+  snapCanvas.height = size;
+  const ctx = snapCanvas.getContext('2d');
+  // mirror to match video preview
+  ctx.save();
+  ctx.translate(size, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(video, ox, oy, size, size, 0, 0, size, size);
+  ctx.restore();
+
+  state.photoDataUrl = snapCanvas.toDataURL('image/jpeg', 0.92);
+  stopCamera();
+  showScreen('difficulty');
+});
+
+// ══════════════════════════════════════════════
+// DIFFICULTY
+// ══════════════════════════════════════════════
+const diffCards = document.querySelectorAll('.diff-card');
+
+diffCards.forEach(card => {
+  card.addEventListener('click', () => {
+    diffCards.forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.gridSize = parseInt(card.dataset.grid);
+  });
+});
+
+$('btn-retake-diff').addEventListener('click', () => {
+  showScreen('camera');
+  startCamera();
+});
+
+$('btn-start-puzzle').addEventListener('click', () => {
+  const sel = document.querySelector('.diff-card.selected');
+  state.gridSize = parseInt(sel ? sel.dataset.grid : 4);
+  buildPuzzle();
+});
+
+// ══════════════════════════════════════════════
+// PUZZLE BUILD
+// ══════════════════════════════════════════════
+const board       = $('puzzle-board');
+const previewCanvas = $('preview-canvas');
+const statTime    = $('stat-time');
+const statMoves   = $('stat-moves');
+const statCorrect = $('stat-correct');
+const progressFill = $('progress-fill');
+const headerDiff  = $('header-diff');
+
+function buildPuzzle() {
+  showScreen('puzzle');
+  clearTimer();
+  state.moves = 0;
+  state.won   = false;
+  board.innerHTML = '';
+  state.pieces = [];
+
+  const n = state.gridSize;
+  const total = n * n;
+
+  // Responsive board sizing
+  const maxW = Math.min(
+    screens.puzzle.clientWidth - (window.innerWidth <= 600 ? 0 : 180 + 20 + 32),
+    480
+  );
+  const boardSize  = Math.floor(maxW / n) * n;
+  const pieceSize  = boardSize / n;
+  state.boardSize  = boardSize;
+  state.pieceSize  = pieceSize;
+
+  board.style.width  = boardSize + 'px';
+  board.style.height = boardSize + 'px';
+
+  // Draw preview
+  const img = new Image();
+  img.onload = () => {
+    previewCanvas.width  = 140;
+    previewCanvas.height = 140;
+    const pctx = previewCanvas.getContext('2d');
+    pctx.drawImage(img, 0, 0, 140, 140);
+
+    // Slice pieces
+    const pieces = [];
+    for (let i = 0; i < total; i++) {
+      const row = Math.floor(i / n);
+      const col = i % n;
+      const pc = document.createElement('canvas');
+      pc.width  = pieceSize;
+      pc.height = pieceSize;
+      const cx = pc.getContext('2d');
+      cx.drawImage(
+        img,
+        col * (img.width  / n),
+        row * (img.height / n),
+        img.width  / n,
+        img.height / n,
+        0, 0, pieceSize, pieceSize
+      );
+      pieces.push({ id: i, correctIdx: i, currentIdx: i, pieceCanvas: pc });
+    }
+
+    // Scramble (guaranteed solvable by doing random swaps)
+    const order = Array.from({length: total}, (_, i) => i);
+    for (let s = order.length - 1; s > 0; s--) {
+      const t = Math.floor(Math.random() * (s + 1));
+      [order[s], order[t]] = [order[t], order[s]];
+    }
+    // Ensure not already solved
+    const isSolved = order.every((v, i) => v === i);
+    if (isSolved && total > 1) {
+      [order[0], order[1]] = [order[1], order[0]];
+    }
+
+    // Build piece elements
+    state.pieces = pieces.map((p, i) => {
+      const el = document.createElement('div');
+      el.className = 'puzzle-piece';
+      el.style.width  = pieceSize + 'px';
+      el.style.height = pieceSize + 'px';
+      el.appendChild(p.pieceCanvas);
+
+      // currentIdx = where does THIS piece (id=i) currently sit?
+      const currentIdx = order.indexOf(i);
+      p.currentIdx = currentIdx;
+
+      const cRow = Math.floor(currentIdx / n);
+      const cCol = currentIdx % n;
+      el.style.left = (cCol * pieceSize) + 'px';
+      el.style.top  = (cRow * pieceSize) + 'px';
+
+      board.appendChild(el);
+      attachDragListeners(el, p);
+      return p;
+    });
+
+    updateCorrect();
+    updateStats();
+    updateHeader();
+
+    // Start timer
+    state.startTime = performance.now();
+    state.timerInterval = setInterval(tickTimer, 100);
+  };
+  img.src = state.photoDataUrl;
+}
+
+// ══════════════════════════════════════════════
+// DRAG (mouse + touch unified)
+// ══════════════════════════════════════════════
+let dragging = null;
+let dragOffX = 0, dragOffY = 0;
+let boardRect = null;
+
+function attachDragListeners(el, piece) {
+  el.addEventListener('mousedown',  e => startDrag(e, el, piece, false));
+  el.addEventListener('touchstart', e => startDrag(e, el, piece, true), { passive: false });
+}
+
+function getEventXY(e, touch) {
+  if (touch) {
+    const t = e.touches[0] || e.changedTouches[0];
+    return { x: t.clientX, y: t.clientY };
+  }
+  return { x: e.clientX, y: e.clientY };
+}
+
+function startDrag(e, el, piece, touch) {
+  if (state.won) return;
+  e.preventDefault();
+  boardRect = board.getBoundingClientRect();
+  const { x, y } = getEventXY(e, touch);
+  const er = el.getBoundingClientRect();
+  dragOffX = x - er.left;
+  dragOffY = y - er.top;
+  dragging = { el, piece };
+  el.classList.add('dragging');
+  el.style.zIndex = 999;
+  el.style.transition = 'none';
+}
+
+function onMove(e, touch) {
+  if (!dragging) return;
+  e.preventDefault();
+  const { x, y } = getEventXY(e, touch);
+  const nx = x - boardRect.left - dragOffX;
+  const ny = y - boardRect.top  - dragOffY;
+  dragging.el.style.left = nx + 'px';
+  dragging.el.style.top  = ny + 'px';
+}
+
+function onEnd(e, touch) {
+  if (!dragging) return;
+  const { x, y } = getEventXY(e, touch);
+  const { el, piece } = dragging;
+  dragging = null;
+  el.classList.remove('dragging');
+  el.style.zIndex = '';
+  el.style.transition = '';
+
+  const n = state.gridSize;
+  const ps = state.pieceSize;
+
+  // Find target cell under drop point
+  const bx = x - boardRect.left;
+  const by = y - boardRect.top;
+  const col = Math.floor(bx / ps);
+  const row = Math.floor(by / ps);
+
+  if (col < 0 || col >= n || row < 0 || row >= n) {
+    // Snap back to current position
+    snapToIdx(el, piece.currentIdx);
+    return;
+  }
+
+  const targetIdx = row * n + col;
+  if (targetIdx === piece.currentIdx) {
+    snapToIdx(el, piece.currentIdx);
+    return;
+  }
+
+  // Find whatever piece is at targetIdx and swap
+  const other = state.pieces.find(p => p.currentIdx === targetIdx && p !== piece);
+  if (other) {
+    other.currentIdx = piece.currentIdx;
+    snapToIdx(other.el, other.currentIdx);
+    updateCorrectPiece(other);
+  }
+
+  piece.currentIdx = targetIdx;
+  snapToIdx(el, targetIdx);
+  updateCorrectPiece(piece);
+
+  state.moves++;
+  updateStats();
+  updateCorrect();
+  checkWin();
+}
+
+function snapToIdx(el, idx) {
+  const n = state.gridSize;
+  const ps = state.pieceSize;
+  const col = idx % n;
+  const row = Math.floor(idx / n);
+  el.style.left = (col * ps) + 'px';
+  el.style.top  = (row * ps) + 'px';
+}
+
+function updateCorrectPiece(piece) {
+  if (piece.currentIdx === piece.correctIdx) {
+    piece.el && piece.el.classList.add('correct');
+  } else {
+    piece.el && piece.el.classList.remove('correct');
+  }
+}
+
+document.addEventListener('mousemove',  e => onMove(e, false));
+document.addEventListener('touchmove',  e => onMove(e, true),  { passive: false });
+document.addEventListener('mouseup',    e => onEnd(e, false));
+document.addEventListener('touchend',   e => onEnd(e, true),   { passive: false });
+
+// Attach el references after building
+function linkEls() {
+  state.pieces.forEach(p => {
+    // el already set during build via closure
+  });
+}
+
+// Re-assign el when building
+function buildPieceEl(p, el) { p.el = el; }
+
+// Patch buildPuzzle to assign el
+const _origBuild = buildPuzzle;
+
+// ══════════════════════════════════════════════
+// CORRECT / WIN
+// ══════════════════════════════════════════════
+function updateCorrect() {
+  const n = state.gridSize;
+  const total = n * n;
+  let correct = 0;
+  state.pieces.forEach(p => {
+    const isCorrect = p.currentIdx === p.correctIdx;
+    correct += isCorrect ? 1 : 0;
+  });
+  state.correctCount = correct;
+  statCorrect.textContent = correct + ' / ' + total;
+  progressFill.style.width = Math.round(correct / total * 100) + '%';
+}
+
+function updateStats() {
+  statMoves.textContent = state.moves;
+}
+
+function updateHeader() {
+  const n = state.gridSize;
+  headerDiff.textContent = n + '×' + n;
+}
+
+function checkWin() {
+  const total = state.gridSize * state.gridSize;
+  if (state.correctCount === total && !state.won) {
+    state.won = true;
+    clearTimer();
+    showWin();
+  }
+}
+
+// ══════════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════════
+function tickTimer() {
+  state.elapsed = performance.now() - state.startTime;
+  statTime.textContent = formatTime(state.elapsed);
+}
+
+function clearTimer() {
+  if (state.timerInterval) {
+    clearInterval(state.timerInterval);
+    state.timerInterval = null;
+  }
+}
+
+function formatTime(ms) {
+  const total = Math.floor(ms / 100);
+  const tenths = total % 10;
+  const secs   = Math.floor(total / 10) % 60;
+  const mins   = Math.floor(total / 600);
+  return pad2(mins) + ':' + pad2(secs) + '.' + tenths;
+}
+
+function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+
+// ══════════════════════════════════════════════
+// WIN SCREEN
+// ══════════════════════════════════════════════
+const winOverlay = $('win-overlay');
+
+function showWin() {
+  const t = formatTime(state.elapsed);
+  const n = state.gridSize;
+
+  $('win-time').textContent  = t;
+  $('win-moves').textContent = state.moves;
+  $('win-diff').textContent  = n + '×' + n;
+
+  const emojis = ['🎉','🥳','🏆','✨','🎊'];
+  $('win-emoji').textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+  saveScore(t, state.moves, n + 'x' + n, state.elapsed);
+  renderLeaderboard();
+
+  winOverlay.classList.add('active');
+  launchConfetti();
+}
+
+// ══════════════════════════════════════════════
+// LEADERBOARD
+// ══════════════════════════════════════════════
+const LB_KEY = 'facepuzzle_scores';
+
+function saveScore(time, moves, diff, ms) {
+  let scores = [];
+  try { scores = JSON.parse(localStorage.getItem(LB_KEY) || '[]'); } catch(e) {}
+  const now = new Date();
+  scores.push({
+    time, moves, diff, ms,
+    date: now.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
+  });
+  scores.sort((a, b) => a.ms - b.ms);
+  scores = scores.slice(0, 5);
+  try { localStorage.setItem(LB_KEY, JSON.stringify(scores)); } catch(e) {}
+}
+
+function renderLeaderboard() {
+  const list = $('lb-list');
+  let scores = [];
+  try { scores = JSON.parse(localStorage.getItem(LB_KEY) || '[]'); } catch(e) {}
+
+  if (!scores.length) {
+    list.innerHTML = '<div class="lb-empty">No saved scores yet.</div>';
+    return;
+  }
+
+  const rankClass = ['gold','silver','bronze'];
+  list.innerHTML = scores.map((s, i) => `
+    <div class="lb-row">
+      <div class="lb-rank ${rankClass[i] || ''}">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1)}</div>
+      <div class="lb-info">
+        <div style="font-size:0.8125rem;color:var(--text)">${s.time}</div>
+        <div class="lb-date">${s.date}</div>
+      </div>
+      <div class="lb-diff">${s.diff}</div>
+      <div class="lb-moves">${s.moves} moves</div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════════
+// CONFETTI
+// ══════════════════════════════════════════════
+const confettiCanvas = $('confetti-canvas');
+const cCtx = confettiCanvas.getContext('2d');
+let confettiParticles = [];
+let confettiRaf = null;
+
+function launchConfetti() {
+  confettiCanvas.width  = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+  confettiParticles = Array.from({length: 120}, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight - window.innerHeight,
+    r: 4 + Math.random() * 7,
+    dx: (Math.random() - 0.5) * 3,
+    dy: 2 + Math.random() * 4,
+    rot: Math.random() * 360,
+    drot: (Math.random() - 0.5) * 6,
+    color: ['#7c6af7','#3ddc84','#f5c842','#f75a5a','#a89af9','#fff'][Math.floor(Math.random() * 6)],
+    life: 1,
+  }));
+  if (confettiRaf) cancelAnimationFrame(confettiRaf);
+  animateConfetti();
+}
+
+function animateConfetti() {
+  cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confettiParticles = confettiParticles.filter(p => p.life > 0.02);
+  confettiParticles.forEach(p => {
+    p.x   += p.dx;
+    p.y   += p.dy;
+    p.rot += p.drot;
+    if (p.y > confettiCanvas.height) { p.y = -10; p.x = Math.random() * confettiCanvas.width; }
+    p.life -= 0.005;
+    cCtx.save();
+    cCtx.globalAlpha = p.life;
+    cCtx.translate(p.x, p.y);
+    cCtx.rotate(p.rot * Math.PI / 180);
+    cCtx.fillStyle = p.color;
+    cCtx.fillRect(-p.r / 2, -p.r / 2, p.r, p.r * 0.5);
+    cCtx.restore();
+  });
+  if (confettiParticles.length) {
+    confettiRaf = requestAnimationFrame(animateConfetti);
+  }
+}
+
+// ══════════════════════════════════════════════
+// BUTTON WIRING
+// ══════════════════════════════════════════════
+function goNewPhoto() {
+  winOverlay.classList.remove('active');
+  if (confettiRaf) { cancelAnimationFrame(confettiRaf); confettiRaf = null; }
+  cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  clearTimer();
+  headerDiff.textContent = '';
+  state.photoDataUrl = null;
+  board.innerHTML = '';
+  state.pieces = [];
+  showScreen('camera');
+  startCamera();
+}
+
+function goPlayAgain() {
+  winOverlay.classList.remove('active');
+  if (confettiRaf) { cancelAnimationFrame(confettiRaf); confettiRaf = null; }
+  cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  buildPuzzle();
+}
+
+$('btn-new-photo-win').addEventListener('click', goNewPhoto);
+$('btn-play-again-win').addEventListener('click', goPlayAgain);
+$('btn-new-photo-puzzle').addEventListener('click', goNewPhoto);
+$('btn-play-again-puzzle').addEventListener('click', () => {
+  clearTimer();
+  buildPuzzle();
+});
+
+// ══════════════════════════════════════════════
+// PATCH buildPuzzle to assign p.el
+// ══════════════════════════════════════════════
+// We need to make sure p.el is set; patch after initial definition
+const _buildPuzzleOrig = buildPuzzle;
+
+function buildPuzzle() {
+  showScreen('puzzle');
+  clearTimer();
+  state.moves = 0;
+  state.won   = false;
+  board.innerHTML = '';
+  state.pieces = [];
+  if (confettiRaf) { cancelAnimationFrame(confettiRaf); confettiRaf = null; }
+  cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+  const n = state.gridSize;
+  const total = n * n;
+
+  const availW = Math.min(screens.puzzle.clientWidth - (window.innerWidth > 600 ? 200 : 0) - 40, 480);
+  const boardSize = Math.floor(availW / n) * n;
+  const pieceSize = boardSize / n;
+  state.boardSize = boardSize;
+  state.pieceSize = pieceSize;
+
+  board.style.width  = boardSize + 'px';
+  board.style.height = boardSize + 'px';
+
+  const img = new Image();
+  img.onload = () => {
+    previewCanvas.width  = 140;
+    previewCanvas.height = 140;
+    const pctx = previewCanvas.getContext('2d');
+    pctx.drawImage(img, 0, 0, 140, 140);
+
+    // Slice
+    const pieces = [];
+    for (let i = 0; i < total; i++) {
+      const row = Math.floor(i / n);
+      const col = i % n;
+      const pc = document.createElement('canvas');
+      pc.width  = pieceSize;
+      pc.height = pieceSize;
+      const cx = pc.getContext('2d');
+      cx.drawImage(
+        img,
+        col * (img.width  / n),
+        row * (img.height / n),
+        img.width  / n,
+        img.height / n,
+        0, 0, pieceSize, pieceSize
+      );
+      pieces.push({ id: i, correctIdx: i, currentIdx: i, pieceCanvas: pc, el: null });
+    }
+
+    // Scramble via Fisher-Yates on position assignments
+    const order = Array.from({length: total}, (_, i) => i);
+    for (let s = order.length - 1; s > 0; s--) {
+      const t = Math.floor(Math.random() * (s + 1));
+      [order[s], order[t]] = [order[t], order[s]];
+    }
+    const isSolved = order.every((v, i) => v === i);
+    if (isSolved && total > 1) [order[0], order[1]] = [order[1], order[0]];
+
+    // order[i] = which piece sits at position i
+    // We want to know: for piece id=j, which position does it start at?
+    const piecePos = new Array(total);
+    for (let i = 0; i < total; i++) piecePos[order[i]] = i;
+
+    pieces.forEach((p, j) => {
+      p.currentIdx = piecePos[j];
+
+      const el = document.createElement('div');
+      el.className = 'puzzle-piece';
+      el.style.width  = pieceSize + 'px';
+      el.style.height = pieceSize + 'px';
+      el.appendChild(p.pieceCanvas);
+      p.el = el;
+
+      const cRow = Math.floor(p.currentIdx / n);
+      const cCol = p.currentIdx % n;
+      el.style.left = (cCol * pieceSize) + 'px';
+      el.style.top  = (cRow * pieceSize) + 'px';
+
+      board.appendChild(el);
+      attachDragListeners(el, p);
+    });
+
+    state.pieces = pieces;
+    updateCorrect();
+    updateStats();
+    updateHeader();
+    statTime.textContent = '00:00.0';
+
+    state.startTime = performance.now();
+    state.elapsed   = 0;
+    state.timerInterval = setInterval(tickTimer, 100);
+  };
+  img.src = state.photoDataUrl;
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+startCamera();
+
+})();
+</script>
+</body>
+</html>
