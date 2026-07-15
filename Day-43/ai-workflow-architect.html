@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workflow Architect — Next.js E-Commerce Build</title>
+<style>
+:root{
+  --bg:#12141c;
+  --panel:#181b26;
+  --panel-2:#1e2230;
+  --line:#2a2f42;
+  --text:#e4e6ed;
+  --text-dim:#9aa0b4;
+  --muted:#6b7280;
+  --blue:#5b8def;
+  --amber:#e8a33d;
+  --green:#4caf7d;
+  --red:#e0616b;
+  --purple:#b58aef;
+  --mono:ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,Consolas,"Courier New",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --radius:8px;
+}
+[data-theme="light"]{
+  --bg:#f3f2ec;
+  --panel:#ffffff;
+  --panel-2:#f7f6f1;
+  --line:#ddd9cc;
+  --text:#22252c;
+  --text-dim:#5b5f6b;
+  --muted:#8a8d97;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  transition:background .3s,color .3s;
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+
+/* ---- Title bar ---- */
+.titlebar{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px;background:var(--panel);
+  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:50;
+}
+.dots{display:flex;gap:6px;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:var(--red);} .dot.a{background:var(--amber);} .dot.g{background:var(--green);}
+.titlebar .path{
+  font-family:var(--mono);font-size:12.5px;color:var(--text-dim);
+  margin-left:6px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.titlebar .actions{display:flex;gap:8px;align-items:center;}
+.btn{
+  font-family:var(--sans);font-size:12.5px;color:var(--text);
+  background:var(--panel-2);border:1px solid var(--line);
+  padding:6px 12px;border-radius:6px;cursor:pointer;transition:.15s;
+}
+.btn:hover{border-color:var(--blue);color:var(--blue);}
+.btn:focus-visible, a:focus-visible, .navitem:focus-visible, input:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.btn.accent{background:var(--blue);border-color:var(--blue);color:#0d1117;font-weight:600;}
+.btn.accent:hover{filter:brightness(1.1);color:#0d1117;}
+
+/* ---- Layout ---- */
+.app{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 45px);}
+@media (max-width:860px){.app{grid-template-columns:1fr;}}
+
+/* sidebar */
+.sidebar{
+  background:var(--panel);border-right:1px solid var(--line);
+  padding:16px 10px;position:sticky;top:45px;height:calc(100vh - 45px);overflow-y:auto;
+}
+@media (max-width:860px){.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line);}}
+.sidebar h4{
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);
+  text-transform:uppercase;padding:6px 10px;margin-top:10px;
+}
+.sidebar h4:first-child{margin-top:0;}
+.navitem{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:6px;cursor:pointer;
+  font-size:13.5px;color:var(--text-dim);margin-bottom:2px;
+  border-left:2px solid transparent;
+}
+.navitem:hover{background:var(--panel-2);color:var(--text);}
+.navitem.active{background:var(--panel-2);color:var(--blue);border-left-color:var(--blue);font-weight:600;}
+.navitem .num{font-family:var(--mono);font-size:11px;color:var(--muted);width:16px;}
+.navitem.done .num::after{content:"✓";color:var(--green);margin-left:2px;}
+.progress-wrap{padding:12px 10px 4px;}
+.progress-track{height:5px;background:var(--panel-2);border-radius:3px;overflow:hidden;border:1px solid var(--line);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0%;transition:width .4s;}
+.progress-label{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:6px;}
+
+/* main */
+.main{padding:28px 32px 80px;max-width:980px;}
+@media (max-width:600px){.main{padding:18px 16px 60px;}}
+
+.hero{margin-bottom:34px;}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;color:var(--blue);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{content:"//";color:var(--muted);}
+h1{font-size:clamp(26px,4vw,38px);line-height:1.15;margin-bottom:12px;letter-spacing:-.01em;}
+h1 .accent-word{color:var(--blue);}
+.hero p{color:var(--text-dim);font-size:15px;max-width:640px;line-height:1.6;}
+.hero-meta{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap;}
+.meta-chip{
+  font-family:var(--mono);font-size:12px;color:var(--text-dim);
+  background:var(--panel);border:1px solid var(--line);padding:5px 10px;border-radius:20px;
+}
+
+/* stage card */
+.stage{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+  margin-bottom:22px;overflow:hidden;
+}
+.stage-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;cursor:pointer;background:var(--panel-2);
+}
+.stage-head-left{display:flex;align-items:center;gap:14px;}
+.stage-index{
+  font-family:var(--mono);font-size:13px;color:var(--bg);background:var(--blue);
+  width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;
+}
+.stage-titles h3{font-size:16.5px;}
+.stage-titles span{font-size:12px;color:var(--muted);font-family:var(--mono);}
+.stage-toggle{color:var(--muted);transition:transform .25s;font-family:var(--mono);}
+.stage.open .stage-toggle{transform:rotate(180deg);}
+.stage-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.stage.open .stage-body{max-height:6000px;}
+.stage-inner{padding:6px 20px 22px;}
+
+.stage-check{display:flex;align-items:center;gap:8px;margin:8px 0 16px;}
+.stage-check label{font-size:12.5px;color:var(--text-dim);cursor:pointer;}
+.stage-check input{width:15px;height:15px;accent-color:var(--green);cursor:pointer;}
+
+.tabs{display:flex;flex-wrap:wrap;gap:6px;border-bottom:1px solid var(--line);margin-bottom:16px;padding-bottom:0;}
+.tabbtn{
+  font-family:var(--mono);font-size:12px;color:var(--text-dim);
+  background:transparent;border:none;border-bottom:2px solid transparent;
+  padding:8px 4px;cursor:pointer;margin-right:14px;
+}
+.tabbtn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tabpanel{display:none;}
+.tabpanel.active{display:block;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(3px);}to{opacity:1;transform:none;}}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media (max-width:640px){.grid2{grid-template-columns:1fr;}}
+ul.plain{list-style:none;}
+ul.plain li{
+  padding:7px 0 7px 20px;position:relative;font-size:13.5px;color:var(--text-dim);line-height:1.5;border-bottom:1px dashed var(--line);
+}
+ul.plain li:last-child{border-bottom:none;}
+ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--blue);}
+ul.plain.mistakes li::before{content:"✕";color:var(--red);}
+ul.plain.practices li::before{content:"✓";color:var(--green);}
+
+.tool-card{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:6px;
+  padding:12px 14px;margin-bottom:10px;
+}
+.tool-card .tool-name{font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px;}
+.tool-tag{font-family:var(--mono);font-size:10.5px;background:var(--blue);color:#0d1117;padding:1px 7px;border-radius:10px;font-weight:700;}
+.tool-tag.alt{background:transparent;border:1px solid var(--muted);color:var(--muted);}
+.tool-card p{font-size:12.5px;color:var(--text-dim);margin-top:5px;line-height:1.5;}
+
+.prompt-box{
+  background:#0c0e14;border:1px solid var(--line);border-radius:6px;padding:12px 14px;
+  font-family:var(--mono);font-size:12.5px;color:var(--green);position:relative;margin-bottom:10px;line-height:1.6;white-space:pre-wrap;
+}
+[data-theme="light"] .prompt-box{background:#1b1d24;color:#8fe0b3;}
+.copy-btn{
+  position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:10.5px;
+  background:var(--panel-2);color:var(--text-dim);border:1px solid var(--line);border-radius:4px;padding:3px 7px;cursor:pointer;
+}
+.copy-btn:hover{color:var(--blue);border-color:var(--blue);}
+
+.notes-area{width:100%;min-height:80px;background:var(--panel-2);border:1px solid var(--line);border-radius:6px;color:var(--text);font-family:var(--sans);font-size:13px;padding:10px;resize:vertical;}
+.notes-area:focus{outline:2px solid var(--blue);}
+
+.stat-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;}
+.stat{
+  font-family:var(--mono);font-size:12px;color:var(--text-dim);
+  background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:6px 10px;display:flex;gap:6px;align-items:center;
+}
+.stat b{color:var(--amber);}
+
+/* decision tree */
+.dtree{font-family:var(--mono);font-size:12.5px;line-height:1.9;color:var(--text-dim);background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:14px 16px;overflow-x:auto;white-space:pre;}
+.dtree b{color:var(--blue);}
+.dtree .yes{color:var(--green);}
+.dtree .no{color:var(--red);}
+
+/* comparison table */
+table.cmp{width:100%;border-collapse:collapse;font-size:13px;}
+table.cmp th,table.cmp td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);}
+table.cmp th{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em;}
+table.cmp td{color:var(--text-dim);}
+table.cmp tr:hover td{color:var(--text);}
+
+/* footer / end sections */
+.endsec{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-bottom:20px;}
+.endsec h2{font-size:19px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.endsec h2::before{content:"§";color:var(--blue);font-family:var(--mono);}
+.keyword-cloud{display:flex;flex-wrap:wrap;gap:8px;}
+.keyword-cloud span{
+  font-family:var(--mono);font-size:12px;background:var(--panel-2);border:1px solid var(--line);
+  padding:5px 10px;border-radius:16px;color:var(--text-dim);
+}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.stack-item{background:var(--panel-2);border:1px solid var(--line);border-radius:6px;padding:12px;text-align:center;}
+.stack-item .role{font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;}
+.stack-item .name{font-weight:700;margin-top:4px;font-size:13.5px;}
+
+.bookmark-btn{
+  background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px;
+}
+.bookmark-btn.active{color:var(--amber);}
+
+footer.statusbar{
+  position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;color:var(--muted);padding:6px 16px;
+  display:flex;justify-content:space-between;z-index:40;
+}
+@media print{
+  .sidebar,.titlebar,footer.statusbar,.tabs,.copy-btn,.bookmark-btn{display:none !important;}
+  .stage-body{max-height:none !important;}
+  .tabpanel{display:block !important;}
+  body{background:#fff;color:#000;}
+  .stage,.endsec{border:1px solid #ccc;break-inside:avoid;}
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<div class="titlebar">
+  <div class="dots"><span class="dot r"></span><span class="dot a"></span><span class="dot g"></span></div>
+  <div class="path">ai-workflow-architect / ecommerce-nextjs / build.workflow</div>
+  <div class="actions">
+    <button class="btn" id="themeToggle">☀ Light mode</button>
+    <button class="btn" id="printBtn">⎙ Print guide</button>
+    <button class="btn accent" id="resetBtn">Reset progress</button>
+  </div>
+</div>
+
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 9 stages complete</div>
+    </div>
+    <h4>Workflow</h4>
+    <div id="navStages"></div>
+    <h4>Reference</h4>
+    <div class="navitem" data-scroll="summary"><span class="num">·</span> Summary</div>
+    <div class="navitem" data-scroll="stack"><span class="num">·</span> Recommended stack</div>
+    <div class="navitem" data-scroll="resources"><span class="num">·</span> Resources & communities</div>
+    <div class="navitem" data-scroll="prompts"><span class="num">·</span> Extra prompts</div>
+    <div class="navitem" data-scroll="future"><span class="num">·</span> Automation roadmap</div>
+  </nav>
+
+  <main class="main">
+    <div class="hero">
+      <div class="eyebrow">Full-Stack Development → Next.js → E-Commerce</div>
+      <h1>Build an <span class="accent-word">e-commerce site</span> end-to-end with Next.js, powered by AI at every stage.</h1>
+      <p>A complete, staged build plan — from discovery to post-launch optimization — with the AI tools worth using at each step, why they fit, ready-to-run prompts, and the mistakes that cost teams the most time.</p>
+      <div class="hero-meta">
+        <span class="meta-chip">⏱ ~7–10 weeks solo, ~3–4 weeks small team</span>
+        <span class="meta-chip">9 stages</span>
+        <span class="meta-chip">Stack: Next.js · Postgres · Stripe</span>
+      </div>
+    </div>
+
+    <div id="stagesContainer"></div>
+
+    <div class="endsec" id="summary">
+      <h2>Workflow Summary</h2>
+      <p style="color:var(--text-dim);font-size:14px;line-height:1.7;">This workflow takes a Next.js e-commerce build from a blank repo to a launched, revenue-generating store. It front-loads planning and data modeling (stages 1–3) so the product catalog, cart, and checkout (4–5) can be built on stable foundations, treats Next.js API routes and server actions as the backend (6), and closes with the QA, deployment, and optimization work that determines whether the store actually converts (7–9). AI tools are used as accelerants at each step — for scaffolding, copywriting, code review, and test generation — not as a replacement for the architectural decisions a developer still needs to make.</p>
+    </div>
+
+    <div class="endsec" id="stack">
+      <h2>Recommended AI Stack</h2>
+      <div class="stack-grid" id="stackGrid"></div>
+    </div>
+
+    <div class="endsec" id="resources">
+      <h2>Learning Resources</h2>
+      <ul class="plain" id="resourceList"></ul>
+      <h4 style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;margin:16px 0 8px;">Communities</h4>
+      <ul class="plain" id="communityList"></ul>
+    </div>
+
+    <div class="endsec" id="prompts">
+      <h2>Search Keywords</h2>
+      <div class="keyword-cloud" id="keywordCloud"></div>
+      <h4 style="font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;margin:18px 0 8px;">Additional AI Prompts</h4>
+      <div id="extraPrompts"></div>
+    </div>
+
+    <div class="endsec" id="future">
+      <h2>Future Automation Opportunities</h2>
+      <ul class="plain practices" id="futureList"></ul>
+    </div>
+  </main>
+</div>
+
+<footer class="statusbar">
+  <span id="statusLeft">Ready</span>
+  <span id="statusRight">Saved locally · No data leaves your browser</span>
+</footer>
+
+<script>
+/* ---------------- DATA ---------------- */
+const STAGES = [
+{
+  id:"discovery", title:"Discovery & Planning", subtitle:"scope, model, roadmap",
+  time:"3–5 days",
+  objectives:["Define the store's niche, catalog size, and target customer","Decide monetization model (single vendor, marketplace, dropship)","Draft feature scope for MVP vs. v2","Choose the tech stack and hosting constraints"],
+  tasks:["Write a one-page product brief","Map competitor stores and pricing pages","Define MVP feature list and cut list","Draft a rough sitemap and user flows","Set success metrics (conversion rate, AOV targets)"],
+  tools:[
+    {name:"Claude", tag:"Primary", use:"Turning a rough idea into a structured product brief, MVP scope, and risk list from a conversational back-and-forth.", alt:false},
+    {name:"ChatGPT (GPT-5)", tag:"Alt", use:"Similar planning support; strong for quick competitor summarization.", alt:true},
+    {name:"Perplexity", tag:"Research", use:"Fast, citation-backed competitor and market research without manual searching.", alt:false}
+  ],
+  prompts:[
+"Act as a product strategist. I'm building a Next.js e-commerce site selling [PRODUCT CATEGORY]. Ask me 8 clarifying questions about audience, catalog size, and monetization, then draft a one-page MVP scope with a cut list of what to defer to v2.",
+"Compare the checkout and product-page UX of [COMPETITOR 1] and [COMPETITOR 2] for a store selling [PRODUCT]. List 5 concrete patterns worth copying and 3 worth avoiding."
+  ],
+  best:["Write the brief yourself first, then use AI to pressure-test it — don't start from a blank prompt","Time-box discovery to under a week; scope creep here delays everything downstream","Get the success metric defined before writing any code"],
+  mistakes:["Skipping competitor research and re-solving already-solved UX problems","Letting the AI define scope unchallenged instead of using it to stress-test your own judgment","Starting development before the data model is sketched"],
+  outputs:["One-page product brief","MVP feature list with cut line","Rough sitemap"],
+  tips:"Feed the AI your actual constraints (budget, timeline, team size) up front — generic advice wastes review time later."
+},
+{
+  id:"design", title:"UX/UI Design & Prototyping", subtitle:"wireframes, design system, prototypes",
+  time:"1 week",
+  objectives:["Design core screens: home, PLP, PDP, cart, checkout","Establish a lightweight design system (type, color, components)","Produce a clickable prototype for stakeholder review"],
+  tasks:["Wireframe key flows (browse → cart → checkout)","Define design tokens (color, spacing, type scale)","Build a clickable prototype","Run a 3–5 person usability check"],
+  tools:[
+    {name:"v0 by Vercel", tag:"Primary", use:"Generates production-ready React/Next.js UI directly from prompts or screenshots — pairs naturally with the target stack.", alt:false},
+    {name:"Figma + Figma AI", tag:"Alt", use:"Better for stakeholder-facing prototypes and design handoff when a design team is involved.", alt:true},
+    {name:"Galileo AI", tag:"Alt", use:"Fast first-draft UI screens from text prompts when starting from nothing.", alt:true}
+  ],
+  prompts:[
+"Design a product detail page for a Next.js e-commerce store selling [PRODUCT]. Include image gallery, price, variant selector, add-to-cart, and trust signals. Use Tailwind CSS. Keep it accessible (proper labels, focus states).",
+"Generate a 4-step checkout flow (cart → shipping → payment → confirmation) as React components with Tailwind, optimized for minimizing drop-off on mobile."
+  ],
+  best:["Design mobile-first; most e-commerce traffic is mobile","Reuse one component library across every AI-generated screen so output stays visually consistent","Validate the checkout flow with real users before writing backend logic"],
+  mistakes:["Generating each screen with a fresh, unrelated prompt — output styles drift","Skipping accessibility checks on generated UI (contrast, focus order, alt text)","Designing a cart/checkout flow with more steps than necessary"],
+  outputs:["Wireframes for 5 core screens","Design token set","Clickable prototype link"],
+  tips:"Paste your design tokens into every UI-generation prompt so output stays on-brand instead of drifting toward generic defaults."
+},
+{
+  id:"architecture", title:"Architecture & Project Setup", subtitle:"repo, data model, auth",
+  time:"2–3 days",
+  objectives:["Scaffold the Next.js app with the App Router","Design the database schema (products, orders, users, inventory)","Set up authentication and environment configuration"],
+  tasks:["Initialize Next.js project with TypeScript and Tailwind","Design and migrate the database schema","Configure auth (NextAuth or Clerk)","Set up environment variables and secrets management","Establish folder structure and coding conventions"],
+  tools:[
+    {name:"Claude Code", tag:"Primary", use:"Scaffolds full project structure, writes schema migrations, and reasons about multi-file architecture changes better than chat-only tools.", alt:false},
+    {name:"Cursor", tag:"Alt", use:"IDE-native AI pairing for fast iteration once the base scaffold exists.", alt:true},
+    {name:"GitHub Copilot", tag:"Alt", use:"Inline completions during manual scaffolding; weaker on whole-project reasoning.", alt:true}
+  ],
+  prompts:[
+"Scaffold a Next.js 15 App Router project for an e-commerce site with TypeScript, Tailwind, and Prisma. Design a schema with Product, Variant, Order, OrderItem, User, and Cart models, including relations and indexes.",
+"Set up NextAuth with email + Google OAuth for this Next.js project, including a middleware that protects /account and /checkout routes."
+  ],
+  best:["Design the schema before writing UI — retrofitting data models is expensive","Keep secrets out of the repo from commit one; use a .env.example","Pick server actions vs. API routes deliberately per use case, not by default"],
+  mistakes:["Modeling inventory as a plain integer with no reservation/lock strategy, causing overselling under load","Hardcoding Stripe or auth keys during prototyping and forgetting to rotate them","Mixing App Router and Pages Router patterns inconsistently"],
+  outputs:["Initialized repo with CI-ready structure","Database schema + migrations","Working auth flow"],
+  tips:"Ask the AI to explain trade-offs (e.g., server actions vs. API routes) before accepting generated architecture — don't just take the first answer."
+},
+{
+  id:"catalog", title:"Product Catalog & Content Layer", subtitle:"PLP, PDP, CMS or DB-driven content",
+  time:"1 week",
+  objectives:["Build product listing and detail pages","Decide on headless CMS vs. database-only content","Implement search and filtering"],
+  tasks:["Build PLP with filtering, sorting, pagination","Build PDP with variants, gallery, reviews","Write or generate product copy and metadata","Implement search (basic or vector-based)","Optimize images and Core Web Vitals"],
+  tools:[
+    {name:"Claude", tag:"Primary", use:"Writing consistent, on-brand product copy at scale and generating SEO metadata without sounding templated.", alt:false},
+    {name:"Sanity + Sanity AI", tag:"Alt", use:"Headless CMS with AI-assisted content modeling if non-developers need to manage the catalog.", alt:true},
+    {name:"Algolia / Typesense", tag:"Search", use:"Purpose-built product search — faster and more relevant than rolling your own.", alt:false}
+  ],
+  prompts:[
+"Write product titles, 60-word descriptions, and SEO meta descriptions for these 5 products: [LIST]. Match a [BRAND VOICE, e.g. minimal/technical] tone and avoid generic marketing adjectives like 'amazing' or 'premium'.",
+"Build a Next.js server component for a filterable product listing page with URL-synced filters for category, price range, and availability, using Prisma queries."
+  ],
+  best:["Generate copy in your brand voice with real product specs fed in — never generic placeholder text","Use server components for catalog data fetching to keep client bundles small","Index products for search before catalog size makes it painful to retrofit"],
+  mistakes:["Publishing AI-generated product copy without a human accuracy pass — wrong specs erode trust fast","Client-side fetching the entire catalog instead of paginating server-side","Ignoring image optimization until Core Web Vitals tank conversion"],
+  outputs:["Functional PLP with filters","Functional PDP with variants","Search implementation"],
+  tips:"Batch-generate copy in one long prompt with all products listed, so tone stays consistent across the whole catalog."
+},
+{
+  id:"cart", title:"Cart, Checkout & Payments", subtitle:"cart state, Stripe integration, orders",
+  time:"1–1.5 weeks",
+  objectives:["Implement persistent cart state","Integrate a payment provider","Handle order creation and confirmation"],
+  tasks:["Build cart state (server-persisted or cookie-based)","Integrate Stripe Checkout or Payment Intents","Implement webhook handling for order confirmation","Build order confirmation and email receipt","Handle tax and shipping calculation"],
+  tools:[
+    {name:"Claude Code", tag:"Primary", use:"Payment integration code needs to be correct on the first pass; strong at reasoning through Stripe webhook edge cases and idempotency.", alt:false},
+    {name:"Stripe's own AI docs assistant", tag:"Alt", use:"Best source of truth for Stripe-specific implementation details, safer than general-purpose models for API specifics.", alt:true}
+  ],
+  prompts:[
+"Implement a Next.js server action that creates a Stripe Checkout session for the current cart, including line items with tax behavior, and a webhook handler that marks the order as paid on checkout.session.completed, with idempotency handling.",
+"Review this cart persistence implementation for race conditions when a logged-out user adds items and then logs in — merge strategy for guest cart into user cart."
+  ],
+  best:["Always verify Stripe webhook signatures — never trust unsigned payloads","Make webhook handlers idempotent; Stripe can and will retry events","Test the full payment flow in Stripe test mode before touching real keys"],
+  mistakes:["Trusting client-side price data instead of recalculating totals server-side","Not handling webhook retries, causing duplicate order records","Forgetting to handle abandoned/failed payment states in the UI"],
+  outputs:["Working cart with persistence","Live Stripe checkout in test mode","Order confirmation flow with email receipt"],
+  tips:"Ask the AI to enumerate edge cases (expired session, webhook out of order, partial refund) before you consider checkout done."
+},
+{
+  id:"backend", title:"Backend APIs & Integrations", subtitle:"server actions, admin, third-party services",
+  time:"1 week",
+  objectives:["Build remaining server actions/API routes (orders, inventory, admin)","Integrate email, shipping, and analytics services","Build a minimal admin view for order/inventory management"],
+  tasks:["Build order and inventory management endpoints","Integrate transactional email (Resend/Postmark)","Integrate shipping rate/label APIs if needed","Set up analytics and conversion tracking","Build a basic internal admin dashboard"],
+  tools:[
+    {name:"Claude Code", tag:"Primary", use:"Multi-file backend logic, refactors, and API route generation with awareness of your existing schema and conventions.", alt:false},
+    {name:"GitHub Copilot", tag:"Alt", use:"Fast inline completion for repetitive CRUD endpoints once patterns are established.", alt:true}
+  ],
+  prompts:[
+"Generate a Next.js API route for admin-only inventory updates that validates the session role, updates the Product stock field transactionally, and logs the change to an AuditLog table.",
+"Write a Resend email template and server action to send an order-confirmation email with itemized order details, triggered from the Stripe webhook handler."
+  ],
+  best:["Gate all admin routes behind server-side role checks, never client-side only","Log inventory and price changes for auditability","Keep third-party API keys server-side; never expose in client bundles"],
+  mistakes:["Building an admin panel with no audit trail for price or stock edits","Relying on client-side role checks that can be bypassed via dev tools","Skipping rate limiting on public API routes, inviting abuse"],
+  outputs:["Admin inventory/order management view","Transactional email flow","Analytics tracking installed"],
+  tips:"Have the AI generate the audit-log/logging pattern once, then reuse it consistently across every admin mutation."
+},
+{
+  id:"testing", title:"Testing & QA", subtitle:"unit, integration, E2E, accessibility",
+  time:"4–6 days",
+  objectives:["Cover critical paths with automated tests","Manually QA cross-browser and mobile","Run an accessibility audit"],
+  tasks:["Write unit tests for pricing/cart logic","Write E2E tests for browse → checkout flow","Run Lighthouse and accessibility audits","Load-test checkout under concurrent orders","Fix bugs found in QA pass"],
+  tools:[
+    {name:"Claude Code", tag:"Primary", use:"Generates test suites (unit + E2E) directly from existing implementation code, catching edge cases a developer might not think to write.", alt:false},
+    {name:"Playwright + Copilot", tag:"Alt", use:"Good for scripting E2E flows quickly once test scenarios are defined.", alt:true}
+  ],
+  prompts:[
+"Write Vitest unit tests for this cart total calculation function, covering discounts, tax, free-shipping thresholds, and zero-quantity edge cases: [PASTE CODE]",
+"Write a Playwright E2E test that adds a product to cart, applies a promo code, completes Stripe test checkout, and asserts the order confirmation page shows the correct total."
+  ],
+  best:["Test pricing/tax/discount logic exhaustively — money bugs are the most expensive kind","Run accessibility audits before launch, not after complaints","Load-test checkout specifically; it's the page that can't afford to fail"],
+  mistakes:["Only testing the happy path and skipping failed-payment and out-of-stock scenarios","Treating Lighthouse score as pass/fail without reading what's actually failing","Shipping without cross-browser testing on real mobile devices"],
+  outputs:["Unit + E2E test suite","Accessibility audit report","Fixed bug list"],
+  tips:"Ask the AI to generate tests for edge cases first (empty cart, expired session, race conditions) — happy-path tests are the easy part."
+},
+{
+  id:"deploy", title:"Deployment & DevOps", subtitle:"CI/CD, hosting, monitoring",
+  time:"2–3 days",
+  objectives:["Set up CI/CD pipeline","Configure production hosting and environment","Set up monitoring, logging, and alerting"],
+  tasks:["Configure Vercel (or equivalent) production deployment","Set up staging environment","Configure CI to run tests and type-checks on PRs","Set up error monitoring (Sentry) and uptime alerts","Configure production environment variables and secrets"],
+  tools:[
+    {name:"Vercel + v0/Claude Code", tag:"Primary", use:"Native Next.js hosting with the least configuration friction; AI can generate the GitHub Actions/Vercel config directly.", alt:false},
+    {name:"Sentry", tag:"Monitoring", use:"Error tracking with AI-assisted issue triage and root-cause suggestions.", alt:false}
+  ],
+  prompts:[
+"Generate a GitHub Actions workflow that runs type-checking, lint, and the test suite on every pull request, and blocks merge on failure, for a Next.js + Prisma project.",
+"Write a production deployment checklist for a Next.js e-commerce app on Vercel, covering environment variables, database connection pooling, and Stripe live-mode switch."
+  ],
+  best:["Never flip Stripe to live mode until the full checklist is verified in staging","Use a connection pooler (e.g. PgBouncer) for serverless database connections","Set up alerts before launch, not after the first incident"],
+  mistakes:["Deploying with test-mode API keys still active in production","No staging environment, so bugs are found by real customers first","Missing database connection pooling, causing serverless function timeouts under load"],
+  outputs:["Production deployment live","CI pipeline enforcing tests on PRs","Monitoring and alerting configured"],
+  tips:"Have the AI generate a pre-launch checklist tailored to your exact stack, then treat it as a hard gate before flipping to live payments."
+},
+{
+  id:"launch", title:"Launch & Post-Launch Optimization", subtitle:"go-live, conversion, iteration",
+  time:"ongoing",
+  objectives:["Launch to real traffic","Monitor conversion funnel and fix leaks","Iterate based on real user behavior"],
+  tasks:["Soft-launch to a small audience first","Monitor funnel drop-off (PLP → PDP → cart → checkout)","A/B test high-impact pages (PDP, checkout)","Set up a feedback loop for bugs and feature requests","Plan the v2 roadmap"],
+  tools:[
+    {name:"Claude", tag:"Primary", use:"Analyzing funnel/analytics data pasted in and proposing prioritized, evidence-based experiments rather than generic advice.", alt:false},
+    {name:"PostHog", tag:"Analytics", use:"Session replay and funnel analysis to see exactly where users drop off.", alt:false}
+  ],
+  prompts:[
+"Here is my funnel data: PLP views [X], PDP views [Y], add-to-cart [Z], checkout starts [A], orders [B]. Identify the biggest drop-off point and propose 3 specific, testable hypotheses for improving it.",
+"Write 3 A/B test variants for this product page headline and CTA, each testing a different value proposition: [paste current copy]."
+  ],
+  best:["Soft-launch before a full marketing push to catch issues with real but limited traffic","Fix the single biggest funnel leak before optimizing anything else","Set a cadence (weekly/biweekly) for reviewing analytics, don't just glance occasionally"],
+  mistakes:["Launching to full traffic before confirming payments and emails work end-to-end in production","Chasing minor UI polish while ignoring a major checkout drop-off","No process for triaging and prioritizing post-launch bug reports"],
+  outputs:["Live store handling real orders","Funnel report with prioritized fixes","v2 roadmap draft"],
+  tips:"Paste real (anonymized) funnel numbers into the AI rather than asking generic 'how do I improve conversion' — specific data produces specific, testable recommendations."
+}
+];
+
+const STACK = [
+ {role:"Planning",name:"Claude"},
+ {role:"UI Generation",name:"v0 by Vercel"},
+ {role:"Coding Agent",name:"Claude Code"},
+ {role:"IDE Pairing",name:"Cursor"},
+ {role:"Research",name:"Perplexity"},
+ {role:"Search",name:"Algolia"},
+ {role:"Payments",name:"Stripe"},
+ {role:"Email",name:"Resend"},
+ {role:"Monitoring",name:"Sentry"},
+ {role:"Analytics",name:"PostHog"},
+ {role:"Hosting",name:"Vercel"},
+ {role:"Database",name:"Postgres + Prisma"}
+];
+
+const RESOURCES = [
+ "Next.js official docs — App Router, Server Actions, caching model",
+ "Stripe Checkout & Webhooks documentation",
+ "web.dev — Core Web Vitals and e-commerce performance guides",
+ "Prisma documentation — schema design and migrations",
+ "Vercel's e-commerce reference architecture (Next.js Commerce)"
+];
+const COMMUNITIES = [
+ "r/nextjs and r/webdev on Reddit",
+ "Vercel Community Discord",
+ "Stripe Developers Discord",
+ "Indie Hackers — e-commerce launch threads",
+ "Next.js GitHub Discussions"
+];
+const KEYWORDS = ["next.js app router e-commerce","stripe checkout webhook idempotency","prisma schema product variants","server actions vs api routes","core web vitals e-commerce","headless commerce next.js","cart persistence race condition","vercel edge caching product pages"];
+const EXTRA_PROMPTS = [
+ "Audit this Next.js e-commerce codebase for common security issues: exposed secrets, missing auth checks, unvalidated server actions. [paste relevant files]",
+ "Propose a caching strategy for product pages that balances freshness (price/stock changes) with performance, using Next.js's revalidation options.",
+ "Write a rollback plan for a failed production deployment of this Next.js e-commerce app on Vercel."
+];
+const FUTURE = [
+ "AI-generated personalized product recommendations based on browsing/purchase history",
+ "Automated inventory reordering triggers based on sales velocity forecasts",
+ "AI-assisted customer support triage for order issues before human handoff",
+ "Automated A/B test generation and analysis for PDP/checkout copy",
+ "AI-drafted seasonal marketing copy and email campaigns synced to inventory"
+];
+
+/* ---------------- STATE ---------------- */
+const STORAGE_KEY = "awa_ecommerce_nextjs_v1";
+function loadState(){
+  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {done:{},notes:{},bookmarks:{}}; }
+  catch(e){ return {done:{},notes:{},bookmarks:{}}; }
+}
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+let state = loadState();
+
+/* ---------------- RENDER ---------------- */
+const navStages = document.getElementById('navStages');
+const stagesContainer = document.getElementById('stagesContainer');
+
+function renderNav(){
+  navStages.innerHTML = STAGES.map((s,i)=>`
+    <div class="navitem ${state.done[s.id]?'done':''}" data-jump="${s.id}" tabindex="0">
+      <span class="num">${String(i+1).padStart(2,'0')}</span> ${s.title}
+    </div>`).join('');
+  navStages.querySelectorAll('[data-jump]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const target = document.getElementById('stage-'+el.dataset.jump);
+      target.classList.add('open');
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+}
+
+function toolCardHTML(t){
+  return `<div class="tool-card">
+    <div class="tool-name">${t.name} <span class="tool-tag ${t.alt?'alt':''}">${t.tag}</span></div>
+    <p>${t.use}</p>
+  </div>`;
+}
+
+function stageHTML(s,i){
+  return `
+  <section class="stage" id="stage-${s.id}">
+    <div class="stage-head" data-toggle="${s.id}">
+      <div class="stage-head-left">
+        <div class="stage-index">${i+1}</div>
+        <div class="stage-titles">
+          <h3>${s.title}</h3>
+          <span>${s.subtitle}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="bookmark-btn ${state.bookmarks[s.id]?'active':''}" data-bookmark="${s.id}" title="Bookmark stage" aria-label="Bookmark stage">★</button>
+        <span class="stage-toggle">▾</span>
+      </div>
+    </div>
+    <div class="stage-body">
+      <div class="stage-inner">
+        <div class="stage-check">
+          <input type="checkbox" id="done-${s.id}" ${state.done[s.id]?'checked':''}>
+          <label for="done-${s.id}">Mark stage complete</label>
+        </div>
+        <div class="stat-row">
+          <span class="stat">⏱ <b>${s.time}</b></span>
+        </div>
+        <div class="tabs" data-tabgroup="${s.id}">
+          <button class="tabbtn active" data-tab="overview">Overview</button>
+          <button class="tabbtn" data-tab="tools">AI Tools</button>
+          <button class="tabbtn" data-tab="prompts">Prompts</button>
+          <button class="tabbtn" data-tab="practices">Practices</button>
+          <button class="tabbtn" data-tab="notes">Notes</button>
+        </div>
+
+        <div class="tabpanel active" data-panel="overview">
+          <div class="grid2">
+            <div>
+              <h4 style="font-size:12.5px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;margin-bottom:6px;">Objectives</h4>
+              <ul class="plain">${s.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+            </div>
+            <div>
+              <h4 style="font-size:12.5px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;margin-bottom:6px;">Tasks</h4>
+              <ul class="plain">${s.tasks.map(o=>`<li>${o}</li>`).join('')}</ul>
+            </div>
+          </div>
+          <h4 style="font-size:12.5px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;margin:16px 0 6px;">Expected outputs</h4>
+          <ul class="plain">${s.outputs.map(o=>`<li>${o}</li>`).join('')}</ul>
+          <h4 style="font-size:12.5px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;margin:16px 0 6px;">Efficiency tip</h4>
+          <p style="font-size:13.5px;color:var(--text-dim);line-height:1.6;">${s.tips}</p>
+        </div>
+
+        <div class="tabpanel" data-panel="tools">
+          ${s.tools.map(toolCardHTML).join('')}
+        </div>
+
+        <div class="tabpanel" data-panel="prompts">
+          ${s.prompts.map(p=>`<div class="prompt-box">${p}<button class="copy-btn" data-copy>copy</button></div>`).join('')}
+        </div>
+
+        <div class="tabpanel" data-panel="practices">
+          <div class="grid2">
+            <div>
+              <h4 style="font-size:12.5px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;margin-bottom:6px;">Best practices</h4>
+              <ul class="plain practices">${s.best.map(o=>`<li>${o}</li>`).join('')}</ul>
+            </div>
+            <div>
+              <h4 style="font-size:12.5px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;margin-bottom:6px;">Common mistakes</h4>
+              <ul class="plain mistakes">${s.mistakes.map(o=>`<li>${o}</li>`).join('')}</ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabpanel" data-panel="notes">
+          <textarea class="notes-area" placeholder="Jot notes for this stage — saved automatically in your browser." data-notes="${s.id}">${state.notes[s.id]||''}</textarea>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderStages(){
+  stagesContainer.innerHTML = STAGES.map(stageHTML).join('');
+}
+
+function renderEnd(){
+  document.getElementById('stackGrid').innerHTML = STACK.map(t=>`
+    <div class="stack-item"><div class="role">${t.role}</div><div class="name">${t.name}</div></div>`).join('');
+  document.getElementById('resourceList').innerHTML = RESOURCES.map(r=>`<li>${r}</li>`).join('');
+  document.getElementById('communityList').innerHTML = COMMUNITIES.map(r=>`<li>${r}</li>`).join('');
+  document.getElementById('keywordCloud').innerHTML = KEYWORDS.map(k=>`<span>${k}</span>`).join('');
+  document.getElementById('extraPrompts').innerHTML = EXTRA_PROMPTS.map(p=>`<div class="prompt-box">${p}<button class="copy-btn" data-copy>copy</button></div>`).join('');
+  document.getElementById('futureList').innerHTML = FUTURE.map(f=>`<li>${f}</li>`).join('');
+}
+
+function updateProgress(){
+  const total = STAGES.length;
+  const done = STAGES.filter(s=>state.done[s.id]).length;
+  document.getElementById('progressFill').style.width = (done/total*100)+'%';
+  document.getElementById('progressLabel').textContent = `${done} / ${total} stages complete`;
+  document.getElementById('statusLeft').textContent = `${done}/${total} complete · ${Math.round(done/total*100)}%`;
+}
+
+/* ---------------- EVENTS ---------------- */
+function bindEvents(){
+  document.querySelectorAll('[data-toggle]').forEach(head=>{
+    head.addEventListener('click',(e)=>{
+      if(e.target.closest('[data-bookmark]')) return;
+      head.closest('.stage').classList.toggle('open');
+    });
+  });
+
+  document.querySelectorAll('[data-bookmark]').forEach(btn=>{
+    btn.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const id = btn.dataset.bookmark;
+      state.bookmarks[id] = !state.bookmarks[id];
+      btn.classList.toggle('active', !!state.bookmarks[id]);
+      saveState();
+    });
+  });
+
+  document.querySelectorAll('[id^="done-"]').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const id = cb.id.replace('done-','');
+      state.done[id] = cb.checked;
+      saveState();
+      renderNav();
+      updateProgress();
+    });
+  });
+
+  document.querySelectorAll('[data-tabgroup]').forEach(group=>{
+    group.querySelectorAll('.tabbtn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const stage = group.closest('.stage-inner');
+        group.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        stage.querySelectorAll('.tabpanel').forEach(p=>p.classList.remove('active'));
+        stage.querySelector(`[data-panel="${btn.dataset.tab}"]`).classList.add('active');
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-notes]').forEach(area=>{
+    area.addEventListener('input',()=>{
+      state.notes[area.dataset.notes] = area.value;
+      saveState();
+    });
+  });
+
+  document.querySelectorAll('[data-copy]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const text = btn.parentElement.textContent.replace('copy','').trim();
+      navigator.clipboard.writeText(text).then(()=>{
+        btn.textContent='copied';
+        setTimeout(()=>btn.textContent='copy',1200);
+      });
+    });
+  });
+
+  document.querySelectorAll('.sidebar [data-scroll]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      document.getElementById(el.dataset.scroll).scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  document.getElementById('themeToggle').addEventListener('click',()=>{
+    const body = document.body;
+    const isLight = body.getAttribute('data-theme')==='light';
+    body.setAttribute('data-theme', isLight?'dark':'light');
+    document.getElementById('themeToggle').textContent = isLight? '☀ Light mode' : '🌙 Dark mode';
+    localStorage.setItem(STORAGE_KEY+'_theme', isLight?'dark':'light');
+  });
+
+  document.getElementById('printBtn').addEventListener('click',()=>{
+    document.querySelectorAll('.stage').forEach(s=>s.classList.add('open'));
+    window.print();
+  });
+
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    if(confirm('Reset all progress, notes, and bookmarks?')){
+      state = {done:{},notes:{},bookmarks:{}};
+      saveState();
+      init();
+    }
+  });
+}
+
+function applyStoredTheme(){
+  const t = localStorage.getItem(STORAGE_KEY+'_theme');
+  if(t==='light'){
+    document.body.setAttribute('data-theme','light');
+    document.getElementById('themeToggle').textContent = '🌙 Dark mode';
+  }
+}
+
+function init(){
+  renderNav();
+  renderStages();
+  renderEnd();
+  updateProgress();
+  bindEvents();
+  applyStoredTheme();
+  if(STAGES[0]) document.getElementById('stage-'+STAGES[0].id).classList.add('open');
+}
+init();
+</script>
+</body>
+</html>
