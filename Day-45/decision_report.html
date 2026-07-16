@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-main: #0f0f14;
+    --bg-card: #1a1a24;
+    --bg-card-alt: #1e1e2e;
+    --text-primary: #f0f0f5;
+    --text-secondary: #8888a0;
+    --accent-green: #34d399;
+    --accent-red: #f87171;
+    --accent-blue: #60a5fa;
+    --accent-gold: #fbbf24;
+    --accent-purple: #a78bfa;
+    --border-subtle: rgba(255,255,255,0.06);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    padding: 40px 16px 60px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+  header { text-align: center; padding: 20px 0 24px; }
+  header h1 { font-size: 28px; font-weight: 800; margin: 0 0 8px; }
+  header .subtitle { font-size: 16px; color: var(--text-secondary); margin-bottom: 6px; }
+  header .date { font-size: 12px; color: var(--text-secondary); }
+  .gradient-line {
+    height: 3px; border-radius: 2px; margin: 20px auto 32px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-gold));
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    border-left: 4px solid transparent;
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card h2 {
+    font-size: 20px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; margin-top: 0; margin-bottom: 16px;
+  }
+  .card p, .card li { font-size: 15px; line-height: 1.7; color: var(--text-primary); }
+  .card ul { padding-left: 20px; margin: 8px 0; }
+  .label { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .s1 { border-left-color: var(--accent-blue); }
+  .s1 h2 { color: var(--accent-blue); }
+
+  .s2 { border-left-color: var(--accent-green); }
+  .s2 h2 { color: var(--accent-green); }
+  .option-card { background: var(--bg-card-alt); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+  .option-card:last-child { margin-bottom: 0; }
+  .option-card h3 { margin: 0 0 10px; font-size: 17px; }
+  .tag { display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 20px; margin-top: 10px; font-weight: 600; }
+  .tag.best { background: rgba(52,211,153,0.15); color: var(--accent-green); }
+
+  .s3 { border-left-color: var(--accent-purple); }
+  .s3 h2 { color: var(--accent-purple); }
+  .bias-tag { display: inline-block; background: rgba(167,139,250,0.15); color: var(--accent-purple); font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin: 4px 6px 4px 0; }
+
+  .s4 { border-left-color: var(--accent-blue); }
+  .s4 h2 { color: var(--accent-blue); }
+  .matrix-row { display: flex; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  .matrix-label { width: 40%; font-size: 13px; color: var(--text-secondary); padding-right: 10px; }
+  .matrix-bars { width: 60%; display: flex; flex-direction: column; gap: 4px; }
+  .bar-container { height: 24px; background: rgba(255,255,255,0.05); border-radius: 8px; overflow: hidden; position: relative; }
+  .bar-fill {
+    height: 100%; border-radius: 8px; display: flex; align-items: center; justify-content: flex-end;
+    padding-right: 8px; color: white; font-weight: 700; font-size: 12px;
+    width: 0; animation: growBar 0.8s ease-out forwards;
+  }
+  @keyframes growBar { from { width: 0; } to { width: var(--target-width); } }
+  .barA { background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+  .barB { background: linear-gradient(90deg, #34d399, #10b981); }
+  .total-row { margin-top: 20px; padding: 16px; background: rgba(255,255,255,0.04); border-radius: 10px; font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; }
+  .winner-badge { color: var(--accent-gold); font-size: 13px; margin-left: 8px; }
+  .legend { display: flex; gap: 20px; margin-bottom: 16px; font-size: 13px; }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .dotA { background: #60a5fa; }
+  .dotB { background: #34d399; }
+
+  .s5 { border-left-color: var(--accent-red); }
+  .s5 h2 { color: var(--accent-red); }
+  .premortem-block { margin-bottom: 18px; }
+  .premortem-block:last-child { margin-bottom: 0; }
+  .premortem-block h3 { font-size: 16px; margin-bottom: 8px; }
+  .warn { color: var(--accent-red); font-weight: 600; }
+
+  .s6 { border-left-color: var(--accent-green); }
+  .s6 h2 { color: var(--accent-green); }
+  .day-row { display: flex; gap: 12px; margin-bottom: 10px; align-items: baseline; }
+  .day-num { font-weight: 700; color: var(--accent-green); min-width: 60px; font-size: 13px; }
+
+  .s7 {
+    border-left-color: var(--accent-gold);
+    background: var(--bg-card-alt);
+    padding: 32px;
+    box-shadow: 0 0 20px rgba(251,191,36,0.15), 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .s7 h2 { color: var(--accent-gold); }
+  .verdict-name { font-size: 30px; font-weight: 800; color: var(--accent-gold); margin: 6px 0 14px; }
+  .hard-truth { font-style: italic; color: var(--text-secondary); margin-top: 16px; }
+
+  .s8 { border-left-color: var(--accent-gold); }
+  .s8 h2 { color: var(--accent-gold); }
+  .share-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .mini-card {
+    background: var(--bg-card-alt); border-radius: 12px; padding: 16px;
+    flex: 1 1 200px; min-width: 200px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .mini-card h4 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.5px; }
+  .mini-card .content { font-size: 14px; line-height: 1.5; flex-grow: 1; }
+  .watermark { font-size: 10px; color: var(--text-secondary); margin-top: 12px; text-align: center; opacity: 0.7; }
+  .mini-score { font-size: 13px; margin-bottom: 4px; }
+  .mini-verdict { font-size: 20px; font-weight: 800; color: var(--accent-gold); margin-bottom: 6px; }
+
+  footer { text-align: center; color: var(--text-secondary); font-size: 12px; margin-top: 40px; }
+
+  @media (max-width: 600px) {
+    .card { padding: 20px 16px; }
+    .matrix-row { flex-direction: column; align-items: stretch; }
+    .matrix-label { width: 100%; margin-bottom: 6px; }
+    .matrix-bars { width: 100%; }
+    header h1 { font-size: 24px; }
+    .verdict-name { font-size: 26px; }
+    .share-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>DECISION REPORT</h1>
+    <div class="subtitle">Apply now for a Python Developer role vs. spend more months preparing (DSA, projects, interview prep)</div>
+    <div class="date">July 16, 2026</div>
+  </header>
+  <div class="gradient-line"></div>
+
+  <!-- SECTION 1 -->
+  <div class="card s1">
+    <h2>The Real Decision</h2>
+    <p>This isn't actually "apply now" vs. "prepare more" — you've already said you want both. The real trade-off is how much weight to put on speed vs. polish inside a 1-month window while your DSA and interview confidence are still shaky. It's hard because the fear cuts both ways: rejection now feels bad, but "losing time" feels worse.</p>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="card s2">
+    <h2>The Case For Each Option</h2>
+    <div class="option-card">
+      <h3>Option A — Apply Immediately, Prep in Parallel</h3>
+      <p><strong>Strongest case:</strong> You get real interview reps and market feedback fast, inside your 1-month window, instead of guessing what "ready" means.</p>
+      <p><strong>Hidden upside:</strong> Even rejections tell you exactly which skill gaps actually matter to employers — sharper than any self-assessment.</p>
+      <p><strong>Biggest weakness:</strong> Weak DSA performance in early interviews could burn your best-fit companies before you're sharp.</p>
+      <span class="tag best">Best if you value: Speed, real-world feedback, momentum</span>
+    </div>
+    <div class="option-card">
+      <h3>Option B — Delay Applying, Prepare First</h3>
+      <p><strong>Strongest case:</strong> You walk into interviews more confident, with fewer avoidable rejections from basic gaps.</p>
+      <p><strong>Hidden upside:</strong> Stronger projects/DSA now can compound into better offers later, not just faster ones.</p>
+      <p><strong>Biggest weakness:</strong> "More prep" has no natural stopping point — it directly conflicts with your 1-month goal and can quietly become avoidance.</p>
+      <span class="tag">Best if you value: Confidence, thoroughness, minimizing early rejection</span>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="card s3">
+    <h2>Assumption Buster</h2>
+    <p class="label">Assumptions you may be making</p>
+    <ul>
+      <li>That interview rejections now are wasted, rather than data.</li>
+      <li>That "ready" is a fixed state you'll clearly recognize when you hit it.</li>
+      <li>That preparing longer guarantees a better offer, rather than just a later one.</li>
+    </ul>
+    <p class="label" style="margin-top:16px;">Biases at play</p>
+    <span class="bias-tag">Loss Aversion</span>
+    <span class="bias-tag">Perfectionism / Status Quo Bias</span>
+    <p style="margin-top:14px;"><strong>What you're definitely ignoring:</strong> You already told me this decision is reversible — a bad-fit job or a slow month can both be corrected. You're weighing this as if a wrong move is permanent, but by your own logic, it isn't.</p>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="card s4">
+    <h2>Decision Matrix</h2>
+    <div class="legend">
+      <span><span class="dot dotA"></span>Option A: Apply Now + Prep Parallel</span>
+      <span><span class="dot dotB"></span>Option B: Delay & Prepare First</span>
+    </div>
+
+    <div class="matrix-row"><div class="matrix-label">Life/Career Upside</div><div class="matrix-bars">
+      <div class="bar-container"><div class="bar-fill barA" style="--target-width:80%; animation-delay:0.1s;">8</div></div>
+      <div class="bar-container"><div class="bar-fill barB" style="--target-width:60%; animation-delay:0.2s;">6</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="matrix-label">Financial Safety</div><div class="matrix-bars">
+      <div class="bar-container"><div class="bar-fill barA" style="--target-width:90%; animation-delay:0.15s;">9</div></div>
+      <div class="bar-container"><div class="bar-fill barB" style="--target-width:30%; animation-delay:0.25s;">3</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="matrix-label">Growth & Learning</div><div class="matrix-bars">
+      <div class="bar-container"><div class="bar-fill barA" style="--target-width:70%; animation-delay:0.1s;">7</div></div>
+      <div class="bar-container"><div class="bar-fill barB" style="--target-width:70%; animation-delay:0.2s;">7</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="matrix-label">Stress Level (10=low)</div><div class="matrix-bars">
+      <div class="bar-container"><div class="bar-fill barA" style="--target-width:50%; animation-delay:0.15s;">5</div></div>
+      <div class="bar-container"><div class="bar-fill barB" style="--target-width:40%; animation-delay:0.25s;">4</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="matrix-label">Reversibility (10=easy)</div><div class="matrix-bars">
+      <div class="bar-container"><div class="bar-fill barA" style="--target-width:80%; animation-delay:0.1s;">8</div></div>
+      <div class="bar-container"><div class="bar-fill barB" style="--target-width:60%; animation-delay:0.2s;">6</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="matrix-label">Long-term Alignment</div><div class="matrix-bars">
+      <div class="bar-container"><div class="bar-fill barA" style="--target-width:70%; animation-delay:0.15s;">7</div></div>
+      <div class="bar-container"><div class="bar-fill barB" style="--target-width:60%; animation-delay:0.25s;">6</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="matrix-label">Regret Risk (10=low)</div><div class="matrix-bars">
+      <div class="bar-container"><div class="bar-fill barA" style="--target-width:70%; animation-delay:0.1s;">7</div></div>
+      <div class="bar-container"><div class="bar-fill barB" style="--target-width:40%; animation-delay:0.2s;">4</div></div>
+    </div></div>
+
+    <div class="total-row">
+      <span>Option A Total: 54 / 70 <span class="winner-badge">★ WINNER</span></span>
+      <span>Option B Total: 36 / 70</span>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="card s5">
+    <h2>Premortem — 12 Months From Now, It Failed</h2>
+    <div class="premortem-block">
+      <h3>Option A failed because...</h3>
+      <ul>
+        <li>You rushed applications with a weak resume/portfolio and got filtered out early.</li>
+        <li>Interview anxiety from under-prepared DSA rounds tanked your top-choice shots.</li>
+        <li>You accepted the first offer out of urgency, into a poor-fit role.</li>
+      </ul>
+      <p><span class="warn">Early warning sign:</span> Multiple rejections at the same interview stage (e.g., always failing DSA rounds).</p>
+      <p><strong>Prevention:</strong> Timebox 60–90 min/day for DSA even while applying, so your weakest link improves in parallel.</p>
+    </div>
+    <div class="premortem-block">
+      <h3>Option B failed because...</h3>
+      <ul>
+        <li>"A bit more prep" quietly stretched past the 1-month goal with no real deadline.</li>
+        <li>You over-indexed on DSA theory but never got live interview practice.</li>
+        <li>By the time you applied, urgency and financial pressure made you desperate, not confident.</li>
+      </ul>
+      <p><span class="warn">Early warning sign:</span> You hit day 20+ of "prep" with zero applications sent.</p>
+      <p><strong>Prevention:</strong> Set a hard application start date now, regardless of how "ready" you feel.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="card s6">
+    <h2>7-Day Test Plan</h2>
+    <div class="day-row"><div class="day-num">Day 1-2</div><div>Update resume/LinkedIn, shortlist 15–20 target roles (startups + IT companies, Python/backend/API focus).</div></div>
+    <div class="day-row"><div class="day-num">Day 3-4</div><div>Apply to 10+ roles while solving DSA problems daily; treat this as your "small experiment."</div></div>
+    <div class="day-row"><div class="day-num">Day 5-6</div><div>Have one conversation with a working Python developer or mentor about realistic interview expectations.</div></div>
+    <div class="day-row"><div class="day-num">Day 7</div><div>Decision day: if you've gotten interview calls, keep applying + prepping in parallel; if zero responses, revisit resume/targeting, not your whole strategy.</div></div>
+  </div>
+
+  <!-- SECTION 7 -->
+  <div class="card s7">
+    <h2>The Verdict</h2>
+    <div class="verdict-name">Apply Now, Prep in Parallel</div>
+    <p>It wins because it matches your actual 1-month goal, keeps the decision reversible as you already noted, and turns real interview feedback into your prep plan instead of guessing.</p>
+    <p><strong>What could flip it:</strong> If your first 5–6 interviews all fail at the exact same technical stage, that's a signal to pause applying and drill that specific gap before continuing.</p>
+    <p class="hard-truth">You don't need to feel ready — you need to start, and let the market tell you what "ready" actually means.</p>
+  </div>
+
+  <!-- SECTION 8 -->
+  <div class="card s8">
+    <h2>Shareable Cards</h2>
+    <div class="share-row">
+      <div class="mini-card">
+        <h4>Matrix Summary</h4>
+        <div class="content">
+          <div class="mini-score"><span class="dot dotA"></span> Apply Now: <strong>54/70</strong></div>
+          <div class="mini-score"><span class="dot dotB"></span> Delay & Prep: <strong>36/70</strong></div>
+        </div>
+        <div class="watermark">Built with Claude AI</div>
+      </div>
+      <div class="mini-card">
+        <h4>Verdict</h4>
+        <div class="content">
+          <div class="mini-verdict">Apply Now</div>
+          <p style="font-size:13px;">Momentum + real feedback beats waiting to feel ready.</p>
+        </div>
+        <div class="watermark">Built with Claude AI</div>
+      </div>
+      <div class="mini-card">
+        <h4>Share This</h4>
+        <div class="content">
+          <p style="font-size:14px; font-weight:700; margin-bottom:6px;">Stop waiting to feel "ready."</p>
+          <p style="font-size:13px;">I used an AI decision framework to stop overthinking my job search.<br>It scored my options and made the call clear in minutes.</p>
+          <p style="font-size:12px; color:var(--accent-blue); margin-top:8px;">Try it yourself →</p>
+        </div>
+        <div class="watermark">Built with Claude AI</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Built with Claude AI | ABTalks 60-Day Challenge</footer>
+</div>
+</body>
+</html>
